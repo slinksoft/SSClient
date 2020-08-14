@@ -9,6 +9,5 @@ Credits:
 - SupraFast
 https://github.com/God-Weapon/SupraclientC
 
-<p align=center>
+
 ![](./client.png)
-</p>
