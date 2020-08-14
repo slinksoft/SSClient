@@ -10,5 +10,5 @@ Credits:
 https://github.com/God-Weapon/SupraclientC
 
 <p align=center>
-<img src=https://i.imgur.com/G9ZlreY.png>
+![](./client.png)
 </p>
