@@ -1,71 +1,71 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.
   kailleraclient.cpp
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3): warning C4005: '_WIN32_WINNT': macro redefinition
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3): warning C4005: '_WIN32_WINNT': macro redefinition
   C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\include\sdkddkver.h(197): note: see previous definition of '_WIN32_WINNT'
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(385): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3317): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3455): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3651): warning C4244: 'initializing': conversion from 'LRESULT' to 'WORD', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3660): warning C4244: 'initializing': conversion from 'LRESULT' to 'WORD', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3922): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3937): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(3947): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4016): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4108): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4118): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4734): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4743): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4752): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4761): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(4770): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(5226): warning C4244: '=': conversion from 'unsigned long' to 'u_short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(5348): warning C4244: '=': conversion from 'long' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(5350): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(5448): warning C4244: '=': conversion from 'long' to 'char', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6444): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6454): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6494): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6495): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6525): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6648): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6708): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6718): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6723): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6728): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6833): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(6838): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7173): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7178): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7260): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7265): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7270): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7317): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7318): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7319): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7320): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7345): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7395): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7396): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7429): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7532): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7544): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7554): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7674): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7675): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7710): warning C4018: '<': signed/unsigned mismatch
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7712): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7838): warning C4244: '=': conversion from 'unsigned long' to 'unsigned short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7933): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7934): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7935): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(7936): warning C4309: '=': truncation of constant value
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(8056): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(8122): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(8129): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(8151): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\kailleraclient.cpp(8155): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(1216,5): warning MSB8012: TargetPath(D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\.\Release\SupraclientC.dll) does not match the Linker's OutputFile property value (D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\Release\kailleraclient.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(385): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3317): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3455): warning C4267: 'initializing': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3651): warning C4244: 'initializing': conversion from 'LRESULT' to 'WORD', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3660): warning C4244: 'initializing': conversion from 'LRESULT' to 'WORD', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3922): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3937): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(3947): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4016): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4108): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4118): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4734): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4743): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4752): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4761): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(4770): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(5226): warning C4244: '=': conversion from 'unsigned long' to 'u_short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(5348): warning C4244: '=': conversion from 'long' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(5350): warning C4244: 'argument': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(5448): warning C4244: '=': conversion from 'long' to 'char', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6444): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6454): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6494): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6495): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6525): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6648): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6708): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6718): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6723): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6728): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6833): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(6838): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7173): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7178): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7260): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7265): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7270): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7317): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7318): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7319): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7320): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7345): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7395): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7396): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7429): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7532): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7544): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7554): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7674): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7675): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7710): warning C4018: '<': signed/unsigned mismatch
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7712): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7838): warning C4244: '=': conversion from 'unsigned long' to 'unsigned short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7933): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7934): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7935): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(7936): warning C4309: '=': truncation of constant value
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(8056): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(8122): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(8129): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(8151): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\kailleraclient.cpp(8155): warning C4267: '=': conversion from 'size_t' to 'short', possible loss of data
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(1216,5): warning MSB8012: TargetPath(D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\.\Release\SupraclientC.dll) does not match the Linker's OutputFile property value (D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\Release\kailleraclient.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(1218,5): warning MSB8012: TargetName(SupraclientC) does not match the Linker's OutputFile property value (kailleraclient). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(1220,5): warning MSB8030: The linker switch "Minimum Required Version" requires "SubSystem" to be set.  Without "SubSystem", the "Minimum Required Version" would not be passed to linker and could prevent to the output binary from running on older Operating Systems.
      Creating library .\Release/kailleraclient.lib and object .\Release/kailleraclient.exp
-  SupraclientC.vcxproj -> D:\Official Portfolio\Programming\Emulinker X Project\SupraclientC-master\.\Release\SupraclientC.dll
+  SupraclientC.vcxproj -> D:\Official Portfolio\Programming\Emulinker X Project\SupraSlinkClient-master\SSClient\.\Release\SupraclientC.dll

@@ -500,10 +500,10 @@ char emulator[128];
 char serverIP[1024] = "127.0.0.1:27888\0";
 unsigned long myPing;
 //################
-char myVersion[12] = "SSC v3.1.3\0";
-char cVersion[29] = "SupraSlinkClient X v3.1.3\0";
-char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.1.3 - Saturday August 15, 2020\r\n\nSpecial Thanks to: OGenDroX, Jgunishka, Trac, Moosehead, & r@z\r\n\nOther Testers: OGenDroX, gav (Nova) Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser (base client and all his amazing work)\nSlink - Dan (merging EmulinkerSF and Emulinker X, enchancing Supra Client to Slink Client)\nJgunishka - Improvements to the client\r\n\nEmail: realslinksoft@gmail.com\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
-char quit[1024] = "I'm using SupraSlinkClient X v3.1.3\0";
+char myVersion[12] = "SSC v3.1.4\0";
+char cVersion[29] = "SupraSlinkClient X v3.1.4\0";
+char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.1.4 - Monday August 31, 2020\r\n\nSpecial Thanks to: OGenDroX, Trac, Moosehead, & r@z\r\n\nOther Testers: OGenDroX, gav (Nova) Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser (base client and all his amazing work)\nSlink - Dan (merging EmulinkerSF and Emulinker X, enchancing Supra Client to Slink Client)\r\n\nEmail: realslinksoft@gmail.com\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
+char quit[1024] = "I'm using SupraSlinkClient X v3.1.4\0";
 //################
 bool chatroom;
 

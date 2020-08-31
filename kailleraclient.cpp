@@ -2494,7 +2494,7 @@ void createInitialWindow(){
 	//Quit Textbox
 	txtQuit = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", quit, textboxProperties, 245, 530, 205, 25, form1, NULL, hInstance, NULL);
 	SendMessage(txtQuit, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
-	lblQuit = CreateWindowEx(controlStyles, "STATIC", "Quit msg:", labelProperties, 196, 535, 46, 15, form1, NULL, hInstance, NULL);
+	lblQuit = CreateWindowEx(controlStyles, "STATIC", "Quit Msg:", labelProperties, 196, 535, 46, 15, form1, NULL, hInstance, NULL);
 	SendMessage(lblQuit, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Stats Label
 	lblStats = CreateWindowEx(controlStyles, "STATIC", cVersion, labelProperties, 510, 510, 270, 15, form1, NULL, hInstance, NULL);
@@ -7619,7 +7619,7 @@ void joinGameRequest(){
 	strcpy(gEmulator, strEmu);
 
 	//Check for Rom/Emulator
-	//if(SendMessage(chkShowError, BM_GETCHECK, 0, 0) == BST_CHECKED){
+	if(SendMessage(chkShowError, BM_GETCHECK, 0, 0) == BST_CHECKED){
 
 		//Get Status
 		b.mask = LVIF_TEXT;
@@ -7658,7 +7658,7 @@ void joinGameRequest(){
 			if(w == IDNO)
 				return;
 		}
-	//}
+	}
 			
 	//Setup Packet
 	dataToBeSent[0] = 0;
