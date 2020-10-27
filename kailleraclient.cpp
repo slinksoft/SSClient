@@ -114,25 +114,25 @@ extern "C" {
 					errorValue = 1;
 
 				//EmulinkerX MaxUsers
-				else if (strncmp(temp, "EmuSF_MaxUsers=", 15) == 0)
+				else if (strncmp(temp, "EmuX_MaxUsers=", 15) == 0)
 					strcpy(maxUsersG, &temp[15]);
 				//EmulinkerX MaxPing
-				else if (strncmp(temp, "EmuSF_MaxPing=", 14) == 0)
+				else if (strncmp(temp, "EmuX_MaxPing=", 14) == 0)
 					strcpy(maxPingG, &temp[14]);
 				//EmulinkerX FakeP2P
-				else if (strncmp(temp, "EmuSF_FakeP2P=1", 15) == 0)
+				else if (strncmp(temp, "EmuX_FakeP2P=1", 15) == 0)
 					fakeP2PValue = 1;
-				else if (strncmp(temp, "EmuSF_FakeP2P=0", 15) == 0)
+				else if (strncmp(temp, "EmuX_FakeP2P=0", 15) == 0)
 					fakeP2PValue = 0;
 				//EmulinkerX REmulator
-				else if (strncmp(temp, "EmuSF_Emulator=1", 16) == 0)
+				else if (strncmp(temp, "EmuX_Emulator=1", 16) == 0)
 					emuResValue = 1;
-				else if (strncmp(temp, "EmuSF_Emulator=0", 16) == 0)
+				else if (strncmp(temp, "EmuX_Emulator=0", 16) == 0)
 					emuResValue = 0;
 				//EmulinkerX RConnection Type 
-				else if (strncmp(temp, "EmuSF_Connection=1", 18) == 0)
+				else if (strncmp(temp, "EmuX_Connection=1", 18) == 0)
 					connResValue = 1;
-				else if (strncmp(temp, "EmuSF_Connection=0", 18) == 0)
+				else if (strncmp(temp, "EmuX_Connection=0", 18) == 0)
 					connResValue = 0;
 
 				//EmulinkerX REmulator
@@ -163,9 +163,9 @@ extern "C" {
 				else if (strncmp(temp, "Cache=1", 7) == 0)
 					useCacheValue = 1;
 				//chkEmulinkerX
-				else if (strncmp(temp, "Use_EmuSF=0", 11) == 0)
+				else if (strncmp(temp, "Use_EmuX=0", 11) == 0)
 					EmulinkerXValue = 0;
-				else if (strncmp(temp, "Use_EmuSF=1", 11) == 0)
+				else if (strncmp(temp, "Use_EmuX=1", 11) == 0)
 					EmulinkerXValue = 1;
 				//chkKeepGameChatLogs
 				else if (strncmp(temp, "Keep_Gameroom_Logs=0", 20) == 0)
@@ -4897,7 +4897,7 @@ int saveConfig(){
 	config << "Create/Close=" << v << "\n";
 	//chkEmulinkerX
 	v = SendMessage(chkEmulinkerX, BM_GETCHECK, 0, 0);
-	config << "Use_EmuSF=" << v << "\n";
+	config << "Use_EmuX=" << v << "\n";
 	//chkBlink
 	v = SendMessage(chkBlink, BM_GETCHECK, 0, 0);
 	config << "Blink=" << v << "\n";
@@ -4929,30 +4929,30 @@ int saveConfig(){
 	config << "P2P_Port=" << p2pPort << "\n";*/
 
 
-	//EmuSF_Emulator
+	//EmuX_Emulator
 	v = SendMessage(chkEmuRes, BM_GETCHECK, 0, 0);
-	config << "EmuSF_Emulator=" << v << "\n";
+	config << "EmuX_Emulator=" << v << "\n";
 
-	//EmuSF_Connection Type
+	//EmuX_Connection Type
 	v = SendMessage(chkConnRes, BM_GETCHECK, 0, 0);
-	config << "EmuSF_Connection=" << v << "\n";
+	config << "EmuX_Connection=" << v << "\n";
 
-	//EmuSF_MaxUsers
+	//EmuX_MaxUsers
 	GetWindowText(txtMaxUsers, maxUsersG, GetWindowTextLength(txtMaxUsers) + 1);
 	if(atoi(maxUsersG) < 1 || atoi(maxUsersG) > 100){
 		wsprintf(maxUsersG, "%i", 16);
 	}
-	config << "EmuSF_MaxUsers=" << maxUsersG << "\n";
+	config << "EmuX_MaxUsers=" << maxUsersG << "\n";
 
-	//EmuSF_MaxUsers
+	//EmuX_MaxUsers
 	GetWindowText(txtMaxPing, maxPingG, GetWindowTextLength(txtMaxPing) + 1);
 	if(atoi(maxPingG) < 1 || atoi(maxPingG) > 1000){
 		wsprintf(maxPingG, "%i", 200);
 	}
-	config << "EmuSF_MaxPing=" << maxPingG << "\n";
+	config << "EmuX_MaxPing=" << maxPingG << "\n";
 	//chkFakeP2P
 	v = SendMessage(chkFakeP2P, BM_GETCHECK, 0, 0);
-	config << "EmuSF_FakeP2P=" << v << "\n";
+	config << "EmuX_FakeP2P=" << v << "\n";
 
 
 	//chkJoinChatGame
@@ -6826,7 +6826,16 @@ void globalChatNotification(unsigned short position, int slot){
 	char message[1024];
 	short strSize;
 	unsigned short i;
-	
+
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
   
 	i = position;
 	//Nick
@@ -6840,7 +6849,9 @@ void globalChatNotification(unsigned short position, int slot){
 	
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
-	strcpy(temp,"<");
+
+	displayAndAutoScrollRichEdit(txtChatroom,buffer, RGB(0, 0, 122));
+	strcpy(temp, "<");
 	strcat(temp, nick);
 	strcat(temp,"> ");
 	strcat(temp,message);
@@ -7168,6 +7179,16 @@ void gameChatNotification(unsigned short position, int slot){
 	short strSize;
 	short i;
 	
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
 	i = position;
 	//Nick
     strSize = strlen(&myBuff[slot].myBuff[i]);
@@ -7192,7 +7213,8 @@ void gameChatNotification(unsigned short position, int slot){
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
-	strcpy(temp,"<");
+	displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+	strcpy(temp, "<");
 	strcat(temp, nick);
 	strcat(temp,"> ");
 	strcat(temp,message);
