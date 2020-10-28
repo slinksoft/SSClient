@@ -17,5 +17,6 @@ https://github.com/God-Weapon/SupraclientC
 
 ![](./fin.png)
 
-Old Version screenshot:
+Old Version Screenshot:
+
 ![](./client.png)
