@@ -684,7 +684,7 @@ extern "C" {
 		AppendMenu(userlistSubMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 		AppendMenu(userlistSubMenu, MF_STRING, 8, "1 day");
 		AppendMenu(userlistSubMenu, MF_STRING, 9, "1 week");
-		AppendMenu(userlistSubMenu, MF_STRING, 10, "For a very long time...");
+		AppendMenu(userlistSubMenu, MF_STRING, 10, "3 weeks");
 	
 		//Ban
 		userlistSubMenu = CreatePopupMenu();
@@ -700,7 +700,7 @@ extern "C" {
 		AppendMenu(userlistSubMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 		AppendMenu(userlistSubMenu, MF_STRING, 18, "1 day");
 		AppendMenu(userlistSubMenu, MF_STRING, 19, "1 week");
-		AppendMenu(userlistSubMenu, MF_STRING, 20, "For a very long time...");
+		AppendMenu(userlistSubMenu, MF_STRING, 20, "3 weeks");
 
 		AppendMenu(userlistMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 
@@ -718,7 +718,7 @@ extern "C" {
 		AppendMenu(userlistSubMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 		AppendMenu(userlistSubMenu, MF_STRING, 38, "1 day");
 		AppendMenu(userlistSubMenu, MF_STRING, 39, "1 week");
-		AppendMenu(userlistSubMenu, MF_STRING, 40, "For a very long time...");
+		AppendMenu(userlistSubMenu, MF_STRING, 40, "3 weeks");
 
 		//Temp Moderator
 		userlistSubMenu = CreatePopupMenu();
@@ -734,7 +734,7 @@ extern "C" {
 		AppendMenu(userlistSubMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 		AppendMenu(userlistSubMenu, MF_STRING, 48, "1 day");
 		AppendMenu(userlistSubMenu, MF_STRING, 49, "1 week");
-		AppendMenu(userlistSubMenu, MF_STRING, 50, "For a very long time...");
+		AppendMenu(userlistSubMenu, MF_STRING, 50, "3 weeks");
 
 		//Temp Admin
 		userlistSubMenu = CreatePopupMenu();
@@ -750,7 +750,7 @@ extern "C" {
 		AppendMenu(userlistSubMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 		AppendMenu(userlistSubMenu, MF_STRING, 28, "1 day");
 		AppendMenu(userlistSubMenu, MF_STRING, 29, "1 week");
-		AppendMenu(userlistSubMenu, MF_STRING, 30, "For a very long time...");
+		AppendMenu(userlistSubMenu, MF_STRING, 30, "3 weeks");
 
 		AppendMenu(userlistMenu, MF_SEPARATOR | MF_POPUP, NULL, NULL);
 		userlistSubMenu = CreatePopupMenu();
