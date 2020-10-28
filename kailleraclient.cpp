@@ -795,7 +795,7 @@ extern "C" {
 		
 
 		//Create Child Window
-		form1 = CreateWindow("SupraSlinkClient", "SupraSlinkClient - GodWeapon & Slink Soft Productions", formProperties, xPos, yPos, 800, 600, NULL, NULL, hInstance, NULL);
+		form1 = CreateWindow("SupraSlinkClient", "SupraSlinkClient - Slink Soft Productions & SupraFast", formProperties, xPos, yPos, 800, 600, NULL, NULL, hInstance, NULL);
 		
 		kailleraInit();
 		createChatroom();
@@ -2537,7 +2537,7 @@ void createInitialWindow(){
 	lblQuit = CreateWindowEx(controlStyles, "STATIC", "Quit Msg:", labelProperties, 196, 535, 46, 15, form1, NULL, hInstance, NULL);
 	SendMessage(lblQuit, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Stats Label
-	lblStats = CreateWindowEx(controlStyles, "STATIC", cVersion, labelProperties, 510, 510, 270, 15, form1, NULL, hInstance, NULL);
+	lblStats = CreateWindowEx(controlStyles, "STATIC", cVersion, labelProperties, 490, 510, 285, 15, form1, NULL, hInstance, NULL);
 	SendMessage(lblStats, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Server IP Textbox
 	txtServerIP = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", serverIP, textboxProperties, 40, 505, 150, 25, form1, NULL, hInstance, NULL);
@@ -6216,7 +6216,7 @@ void showRecentlist(){
 		char str[1024];
 		num = SendMessage(lstRecentList, LVM_GETITEMCOUNT, 0, 0);
 		if(num < 1){
-			SetWindowText(form1, "SupraSlinkClient - GodWeapon & Slink Soft Productions");
+			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
 			wsprintf(str, "%i Recent Servers", num);
@@ -6258,7 +6258,7 @@ void showWaitinglist(){
 		char str[1024];
 		num = SendMessage(lstWaitingList, LVM_GETITEMCOUNT, 0, 0);
 		if(num < 2){
-			SetWindowText(form1, "SupraSlinkClient - GodWeapon & Slink Soft Productions");
+			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
 			wsprintf(str, "%i Waiting Games", num);
@@ -6300,7 +6300,7 @@ void showFavoritelist(){
 		char str[1024];
 		num = SendMessage(lstFavoriteList, LVM_GETITEMCOUNT, 0, 0);
 		if(num < 1){
-			SetWindowText(form1, "SupraSlinkClient - GodWeapon & Slink Soft Productions");
+			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
 			wsprintf(str, "%i Favorite Servers", num);
@@ -6341,7 +6341,7 @@ void showServerlistK(){
 		char str[1024];
 		num = SendMessage(lstServerListK, LVM_GETITEMCOUNT, 0, 0);
 		if(num < 2){
-			SetWindowText(form1, "SupraSlinkClient - GodWeapon & Slink Soft Productions");
+			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
 			wsprintf(str, "%i Kaillera Servers", num);
@@ -6382,7 +6382,7 @@ void showServerlist3D(){
 		char str[1024];
 		num = SendMessage(lstServerList3D, LVM_GETITEMCOUNT, 0, 0);
 		if(num < 2){
-			SetWindowText(form1, "SupraSlinkClient - GodWeapon & Slink Soft Productions");
+			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
 			wsprintf(str, "%i Anti3D Servers", num);
@@ -7418,7 +7418,6 @@ void createGameRequest(){
 	dataToBeSent[0] = 0x00;
 	
 	//Get Game
-	//strcpy(currentGame, "GodWeapon Good Pings: 69.31.15.190:27888");
 	strcpy(&dataToBeSent[1], currentGame);
 	gameLength = strlen(currentGame);
 
