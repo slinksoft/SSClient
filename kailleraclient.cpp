@@ -6544,6 +6544,17 @@ void userQuitNotification(unsigned short position, int slot){
 	
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Quit the Server: ");
@@ -6642,9 +6653,19 @@ void userJoined(unsigned short position, int slot){
 	else
 		memcpy(strConnectionType, "ERROR\0", 5);	
 
-	
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Joined the Server\r\n");
@@ -7384,9 +7405,19 @@ void createGameNotification(unsigned short position, int slot){
     gameID = *(unsigned long*) &myBuff[slot].myBuff[i];
 	wsprintf(strGameID, "%i", gameID);
 	
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
 	strcpy(temp, "<");
 	strcat(temp, owner);
 	strcat(temp, "> Created Game: ");
@@ -7469,8 +7500,19 @@ void quitGameNotification(unsigned short position, int slot){
 	if(pos > -1)
 		SendMessage(lstGameUserlist, LVM_DELETEITEM, (WPARAM) pos, 0);
 
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
+	displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Left the Game\r\n");
@@ -7564,9 +7606,21 @@ void joinGameNotification(unsigned short position, int slot){
 	else
 		strcpy(strConnectionType, "ERROR");	
 
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
+
+	displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Joined the Game\r\n");
@@ -7982,8 +8036,19 @@ void closeGameNotification(unsigned short position, int slot){
 		SendMessage(lstGamelist, LVM_DELETEITEM, (LPARAM) pos, 0);
 
 		
+		// Form local time for time stamp
+
+		time_t rawtime;
+		struct tm* timeinfo;
+		char buffer[80];
+
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
 		//Previous (CRLF) 
 		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
 		strcpy(temp,"<");
 		strcat(temp, owner);
 		strcat(temp, "> ");
