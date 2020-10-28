@@ -10,6 +10,8 @@ void userLoginInformation(short lenUsername, short lenEmulator);
 void serverStatus(unsigned short position, int slot);
 //0x05 - ACK
 void serverToClientAck();
+//0x05 - ACK
+void clientToServerAck();
 //0x07 - Global Chat Notification
 void globalChatNotification(unsigned short position, int slot);
 void globalChatRequest();
@@ -146,6 +148,8 @@ long CALLBACK SubProcTxtQuit(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 WNDPROC EditProcTxtQuit;
 long CALLBACK SubProcTxtNick(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 WNDPROC EditProcTxtNick;
+long CALLBACK SubProcTxtPing(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+WNDPROC EditProcTxtPing;
 
 char * strToLower(TCHAR *str);
 
@@ -216,6 +220,8 @@ HWND serverListTab;
 HWND fLoginInfo;
 HWND lblUsername;
 HWND txtUsername;
+HWND lblPing;
+HWND txtPing;
 HWND chkEmulinkerX;
 int EmulinkerXValue;
 HWND chkEmuRes;
@@ -496,14 +502,15 @@ int xPos = 0;
 int yPos = 0;
 char myServer[1024] = "Not in a Server\0";
 char username[1024] = "Please enter a username!\0";
+char sPing[4] = "-1";
 char emulator[128];
 char serverIP[1024] = "127.0.0.1:27888\0";
 unsigned long myPing;
 //################
-char myVersion[12] = "SSC v3.1.5\0";
-char cVersion[29] = "SupraSlinkClient X v3.1.5\0";
-char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.1.5 - October 27, 2020\r\n\nSpecial Thanks to: OGenDroX, Trac, Moosehead, & r@z\r\n\nOther Testers: OGenDroX, gav (Nova) Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser (base client and all his amazing work)\nSlink - Dan (merging EmulinkerSF and Emulinker X, enhancing Supra Client to Slink Client)\r\n\nEmail: realslinksoft@gmail.com\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
-char quit[1024] = "I'm using SupraSlinkClient X v3.1.5\0";
+char myVersion[12] = "SSC v3.2.1\0";
+char cVersion[35] = "SupraSlinkClient X v3.2.1 - Final\0";
+char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.2.1 - October 31, 2020\r\n\nSpecial Thanks to: OGenDroX, Trac, Moosehead, & r@z\r\n\nOther Testers: OGenDroX, gav (Nova) Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser (base client and all his amazing work)\nSlink - Dan (merging EmulinkerSF and Emulinker X, enhancing Supra Client to Slink Client)\r\n\nEmail: realslinksoft@gmail.com\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
+char quit[1024] = "I'm using SupraSlinkClient X v3.2.1 Final\0";
 //################
 bool chatroom;
 

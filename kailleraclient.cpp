@@ -195,6 +195,9 @@ extern "C" {
 				//ServerIP
 				else if (strncmp(temp, "ServerIP=", 9) == 0)
 					strcpy(serverIP, &temp[9]); //ServerIP=
+				// Ping Spoof
+				else if (strncmp(temp, "SpoofPing=", 10) == 0)
+				strcpy(sPing, &temp[10]); //SpoofPing=
 				//Nick
 				else if (strncmp(temp, "Nick=", 5) == 0) {
 					strcpy(username, &temp[5]); //Nick=
@@ -1096,6 +1099,43 @@ long CALLBACK SubProcTxtNick(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	}
 	return TRUE;
 }
+
+long CALLBACK SubProcTxtPing(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	static bool controlKey = false;
+
+	switch (message) {
+	case WM_KEYDOWN: {
+		switch (LOWORD(wParam)) {
+		case VK_CONTROL: {
+			controlKey = true;
+			return 0;
+		}
+		case 65: {
+			if (controlKey == true) {
+				SendMessage(txtPing, EM_SETSEL, 0, -1);
+				SetFocus(txtPing);
+				return 0;
+			}
+		}
+		}
+	}
+	case WM_KEYUP: {
+		switch (LOWORD(wParam)) {
+		case VK_CONTROL: {
+			controlKey = false;
+			return 0;
+		}
+		}
+	}
+	default: {
+		return CallWindowProc(EditProcTxtPing, hwnd, message, wParam, lParam);
+	}
+	}
+	return TRUE;
+}
+
+
 
 //txtQuit Subclass
 long CALLBACK SubProcTxtIP(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam){
@@ -2509,6 +2549,11 @@ void createInitialWindow(){
 	SendMessage(txtUsername, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	lblUsername = CreateWindowEx(controlStyles, "STATIC", "Nick:", labelProperties, 11, 535, 26, 15, form1, NULL, hInstance, NULL);
 	SendMessage(lblUsername, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	// Ping Spoof Text Box
+	txtPing = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", sPing, textboxProperties, 400, 505, 50, 25, form1, NULL, hInstance, NULL);
+	SendMessage(txtPing, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	lblPing = CreateWindowEx(controlStyles, "STATIC", "Ping Spoof (-1 or Blank For No Spoofing):", labelProperties, 196, 510, 200, 15, form1, NULL, hInstance, NULL);
+	SendMessage(lblPing, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Show Chatroom
 	btnChatroom = CreateWindowEx(controlStyles, "BUTTON", "Servers", buttonProperties, 590, 530, 60, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnChatroom, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
@@ -2616,6 +2661,9 @@ void createInitialWindow(){
 
 	EditProcTxtNick = (WNDPROC)GetWindowLongPtr(txtUsername, GWLP_WNDPROC);
 	SetWindowLongPtr(txtUsername, GWLP_WNDPROC, (DWORD_PTR)SubProcTxtNick);
+
+	EditProcTxtPing = (WNDPROC)GetWindowLongPtr(txtPing, GWLP_WNDPROC);
+	SetWindowLongPtr(txtPing, GWLP_WNDPROC, (DWORD_PTR)SubProcTxtPing);
 
 	EditProcTxtQuit = (WNDPROC)GetWindowLongPtr(txtQuit, GWLP_WNDPROC);
 	SetWindowLongPtr(txtQuit, GWLP_WNDPROC, (DWORD_PTR)SubProcTxtQuit);
@@ -4844,6 +4892,10 @@ int saveConfig(){
 	GetWindowText(txtUsername, temp, GetWindowTextLength(txtUsername) + 1);
 	config << "Nick=" << temp << "\n";
 
+	//Ping
+	GetWindowText(txtPing, temp, GetWindowTextLength(txtPing) + 1);
+	config << "SpoofPing=" << temp << "\n";
+
 	//Connection
 	GetWindowText(cmbConnectionType, temp, GetWindowTextLength(cmbConnectionType) + 1);		
 	if(strcmp(temp,"LAN") == 0)
@@ -5043,6 +5095,8 @@ void displayGameChatroomAsServer(char *msg){
 
 	//Previous (CRLF) 
 	//<Server> Message (CRLF)
+
+
 	strcpy(temp, "<Server> ");
 	strcat(temp, msg);
 	strcat(temp,"\r\n");
@@ -5118,7 +5172,8 @@ void loginToServer(){
 	recvLoopThread = CreateThread(NULL, 0, recvLoop, NULL, 0, NULL);
 	continuousLoopThread = CreateThread(NULL, 0, continuousLoop, NULL, 0, NULL);
 
-	sendto(mySocket, entryMsg,  10, NULL, (sockaddr *) &socketInfo, sizeof(socketInfo));
+	sendto(mySocket, entryMsg, 10, NULL, (sockaddr*)&socketInfo, sizeof(socketInfo));
+
 }
 
 
@@ -5237,6 +5292,7 @@ DWORD WINAPI recvLoop(LPVOID lpParam){
 				//memset(&(socketInfo.sin_zero), 0, 8); 
 
 				short lenUsername = (short)GetWindowTextLength(txtUsername);
+				short lenSpoofPing = (short)GetWindowTextLength(txtPing);
 				short lenEmulator = (short)strlen(emulator);
 				short lenConnectionType = (short)GetWindowTextLength(cmbConnectionType);
 				char temp[16];
@@ -5259,13 +5315,33 @@ DWORD WINAPI recvLoop(LPVOID lpParam){
 					connectionType = good;
 
 				GetWindowText(txtUsername, username, lenUsername + 1);
-				
+
+
 
 				if(lenUsername > 0){
 					userLoginInformation(lenUsername, lenEmulator);
 				}
 				else
 					MessageBox(form1,"Please supply a username!", "Error UserLoginInformation",NULL);
+				
+				char SP[4];
+				GetWindowText(txtPing, SP, lenSpoofPing + 1);
+				
+				if (!strcmp(SP, "-1") == 0)
+				{
+					if (!strcmp(SP, "") == 0)
+					{
+						int spoofPing = atoi(SP);
+						Sleep(spoofPing);
+						clientToServerAck();
+						Sleep(spoofPing);
+						clientToServerAck();
+						Sleep(spoofPing);
+						clientToServerAck();
+						Sleep(spoofPing);
+						clientToServerAck();
+					}
+				}
 			}
 			else if(strncmp(&myBuff[myBuffCount].myBuff[0], "TOO",3) == 0){
 				displayChatroomAsServer("Server is Full!");
@@ -6594,6 +6670,7 @@ void userLoginInformation(short lenUsername, short lenEmulator){
 	//Get/Set Username
 	GetWindowText(txtUsername, dataToBeSent, lenUsername + 1);
 	GetWindowText(txtUsername, username, lenUsername + 1);
+
 	
 	//Get Emulator
 	strcpy(&dataToBeSent[lenUsername + 1], emulator);
@@ -6788,7 +6865,7 @@ void serverToClientAck(){
 	//clientToServerAck();
 }
 
-/*
+
 //0x05 - Client to Server ACK
 void clientToServerAck(){
 	char ack[17];
@@ -6817,7 +6894,7 @@ void clientToServerAck(){
 	//Sleep(10);
     constructPacket(ack, 17, 0x06);
 }
-*/
+
 
 //0x07 - Global Chat Notification
 void globalChatNotification(unsigned short position, int slot){
@@ -6871,6 +6948,8 @@ void showOptions(char show){
 		ShowWindow(txtServerIP, SW_HIDE);
 		ShowWindow(txtUsername, SW_HIDE);
 		ShowWindow(lblUsername, SW_HIDE);
+		ShowWindow(txtPing, SW_HIDE);
+		ShowWindow(lblPing, SW_HIDE);
 		ShowWindow(lblQuit, SW_HIDE);
 		ShowWindow(txtQuit, SW_HIDE);
 		ShowWindow(lblConnectionType, SW_HIDE);
@@ -6920,6 +6999,8 @@ void showOptions(char show){
 		ShowWindow(txtServerIP, SW_SHOW);
 		ShowWindow(txtUsername, SW_SHOW);
 		ShowWindow(lblUsername, SW_SHOW);
+		ShowWindow(txtPing, SW_SHOW);
+		ShowWindow(lblPing, SW_SHOW);
 		ShowWindow(lblQuit, SW_SHOW);
 		ShowWindow(txtQuit, SW_SHOW);
 		ShowWindow(lblConnectionType, SW_SHOW);
@@ -6967,6 +7048,8 @@ void showOptions(char show){
 		ShowWindow(txtServerIP, SW_HIDE);
 		ShowWindow(txtUsername, SW_HIDE);
 		ShowWindow(lblUsername, SW_HIDE);
+		ShowWindow(txtPing, SW_HIDE);
+		ShowWindow(lblPing, SW_HIDE);
 		ShowWindow(lblQuit, SW_HIDE);
 		ShowWindow(txtQuit, SW_HIDE);
 		ShowWindow(lblConnectionType, SW_HIDE);
@@ -7014,6 +7097,8 @@ void showOptions(char show){
 		ShowWindow(txtServerIP, SW_HIDE);
 		ShowWindow(txtUsername, SW_HIDE);
 		ShowWindow(lblUsername, SW_HIDE);
+		ShowWindow(txtPing, SW_HIDE);
+		ShowWindow(lblPing, SW_HIDE);
 		ShowWindow(lblQuit, SW_HIDE);
 		ShowWindow(txtQuit, SW_HIDE);
 		ShowWindow(lblConnectionType, SW_HIDE);
@@ -7059,6 +7144,7 @@ void showOptions(char show){
 	/*else if(show == 4){
 		ShowWindow(txtServerIP, SW_HIDE);
 		ShowWindow(txtUsername, SW_HIDE);
+		ShowWindow(txtPing, SW_HIDE);
 		ShowWindow(txtQuit, SW_HIDE);
 		ShowWindow(cmbConnectionType, SW_HIDE);
 		ShowWindow(chkShowError, SW_HIDE);
@@ -7207,6 +7293,7 @@ void gameChatNotification(unsigned short position, int slot){
 
 	//Show Green if it's <Server>
 	if(nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0'){
+		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
 		displayGameChatroomAsServer(message);
 		return;
 	}
@@ -8167,6 +8254,16 @@ void serverInformationMessage(unsigned short position, int slot){
 	short i;
 	int j;
 
+	// Form local time for time stamp
+
+	time_t rawtime;
+	struct tm* timeinfo;
+	char buffer[80];
+
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
+
 	i = position;
 
     //Nick
@@ -8194,6 +8291,7 @@ void serverInformationMessage(unsigned short position, int slot){
 
 	//Previous (CRLF)
 	//<Nick> Message (CRLF)
+	displayAndAutoScrollRichEdit(txtChatroom,buffer, RGB(0, 0, 122));
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> ");
