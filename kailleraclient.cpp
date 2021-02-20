@@ -5105,6 +5105,21 @@ void displayGameChatroomAsServer(char *msg){
 	displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(34, 139, 34));
 }
 
+void displayGameChatroomAsClientSpamProtect(char* msg) {
+	char temp[2048];
+
+	//Previous (CRLF) 
+	//<Server> Message (CRLF)
+
+
+	strcpy(temp, "<Client> ");
+	strcat(temp, msg);
+	strcat(temp, "\r\n");
+
+	//Display
+	displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(155, 0, 0));
+}
+
 
 void loginToServer(){
 	char serverIP[1024];
@@ -6554,7 +6569,7 @@ void userQuitNotification(unsigned short position, int slot){
 	timeinfo = localtime(&rawtime);
 	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
 
-	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Quit the Server: ");
@@ -6665,7 +6680,7 @@ void userJoined(unsigned short position, int slot){
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Joined the Server\r\n");
@@ -7304,35 +7319,105 @@ void gameChatNotification(unsigned short position, int slot){
 
 	//Message
     strSize = strlen(&myBuff[slot].myBuff[i]);
-	memcpy(message, &myBuff[slot].myBuff[i], strSize + 1);
 
-	//Game Callback
-	if(gamePlaying == true && kInfo.chatReceivedCallback != NULL){
-		if (useScreenChatValue == BST_CHECKED)
-			kInfo.chatReceivedCallback(nick, message);
-	}
+	if (strSize > 225)
+	{
+		memcpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
-	//Show Green if it's <Server>
-	if(nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0'){
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
+
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsClientSpamProtect(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
 		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
-		displayGameChatroomAsServer(message);
-		return;
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
 	}
 
-	//Previous (CRLF) 
-	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
-	strcpy(temp, "<");
-	strcat(temp, nick);
-	strcat(temp,"> ");
-	strcat(temp,message);
-	strcat(temp,"\r\n");
+	else if (strchr(&myBuff[slot].myBuff[i], '\n'))
+	{
+		memcpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
-	//Display
-	displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
 
-	//Log
-	saveGameroomLog(temp);
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsClientSpamProtect(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
+	}
+	else
+	{
+		memcpy(message, &myBuff[slot].myBuff[i], strSize + 1);
+
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
+
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsServer(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
+
+	}
 }
 
 
@@ -7417,7 +7502,7 @@ void createGameNotification(unsigned short position, int slot){
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 	strcpy(temp, "<");
 	strcat(temp, owner);
 	strcat(temp, "> Created Game: ");
@@ -8048,7 +8133,7 @@ void closeGameNotification(unsigned short position, int slot){
 
 		//Previous (CRLF) 
 		//<Nick> Message (CRLF)
-		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 		strcpy(temp,"<");
 		strcat(temp, owner);
 		strcat(temp, "> ");
@@ -8334,39 +8419,116 @@ void serverInformationMessage(unsigned short position, int slot){
     strSize = strlen(&myBuff[slot].myBuff[i]);
 	strncpy(nick, &myBuff[slot].myBuff[i], strSize + 1);
 	i = i + strSize + 1;
+
 	//Message
     strSize = strlen(&myBuff[slot].myBuff[i]);
-	strncpy(message, &myBuff[slot].myBuff[i], strSize + 1);
-	i = i + strSize + 1;
+	if (strSize > 225)
+	{
+		strncpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
-	if(strncmp(message, "VERSION:", 8) == 0){
-		MessageBox(form1, &message[8], "Server Version", NULL);
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, "Client");
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(155, 0, 0));
+
 		//Log
 		saveChatroomLog(temp);
-		return;
 	}
-	else if(strncmp(message, "sccppevercheck", 8) == 0){
-		temp[0] = 'd';
-		strcpy(&temp[1], cVersion);
-		j = strlen(temp) + 1;
-		temp[0] = '\0';
-		constructPacket(temp, j, 0x07);
+	else if (strchr(&myBuff[slot].myBuff[i], '\n'))
+	{
+		strncpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
+
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, "Client");
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(155, 0, 0));
+
+		//Log
+		saveChatroomLog(temp);
+	}
+	else
+	{
+		strncpy(message, &myBuff[slot].myBuff[i], strSize + 1);
+
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(34, 139, 34));
+
+		//Log
+		saveChatroomLog(temp);
 	}
 
-	//Previous (CRLF)
-	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtChatroom,buffer, RGB(0, 0, 122));
-	strcpy(temp,"<");
-	strcat(temp, nick);
-	strcat(temp,"> ");
-	strcat(temp,message);
-	strcat(temp,"\r\n");
 	
-	//Display
-	displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(34, 139, 34));
-
-	//Log
-	saveChatroomLog(temp);
 }
 
 
