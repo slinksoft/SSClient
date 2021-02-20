@@ -10,12 +10,15 @@ Credits:
 
 https://github.com/God-Weapon/SupraclientC
 
+Usage: Add kailleraclient.dll to your favorite Kaillera-netplay supported emulator's directory.
+
 
 3.2.1 Final Screenshots
 
 ![](./fi.png)
 
+![](./fin.png)
 
+Old Version Screenshot:
 
-Old Version screenshot:
 ![](./client.png)
