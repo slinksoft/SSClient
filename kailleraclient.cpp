@@ -3398,12 +3398,22 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 			if(inet_addr(strIP) == INADDR_NONE){
 				hp = gethostbyname(strAddress);
 				if(hp == NULL){
-					closesocket(mySocketK);
-					b.iItem = i;
-					b.iSubItem = 2;
-					b.pszText = "ERR";
-					SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
-					sError = true;
+					hp = gethostbyname(strIP);
+					if (hp != NULL)
+					{
+						struct in_addr** addr_list;
+						addr_list = (struct in_addr**)hp->h_addr_list;
+						socketInfoK.sin_addr.s_addr = inet_addr(inet_ntoa(*addr_list[0]));
+					}
+					else
+					{
+						closesocket(mySocketK);
+						b.iItem = i;
+						b.iSubItem = 2;
+						b.pszText = "ERR";
+						SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
+						sError = true;
+					}
 				}
 			}
 			else{
@@ -3532,19 +3542,29 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 			sError = true;
 		}
 		
-		if(sError == false){		
-			if(inet_addr(strIP) == INADDR_NONE){
+		if (sError == false) {
+			if (inet_addr(strIP) == INADDR_NONE) {
 				hp = gethostbyname(strAddress);
-				if(hp == NULL){
-					closesocket(mySocket3D);
-					b.iItem = i;
-					b.iSubItem = 2;
-					b.pszText = "ERR";
-					SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
-					sError = true;
+				if (hp == NULL) {
+					hp = gethostbyname(strIP);
+					if (hp != NULL)
+					{
+						struct in_addr** addr_list;
+						addr_list = (struct in_addr**)hp->h_addr_list;
+						socketInfo3D.sin_addr.s_addr = inet_addr(inet_ntoa(*addr_list[0]));
+					}
+					else
+					{
+						closesocket(mySocketK);
+						b.iItem = i;
+						b.iSubItem = 2;
+						b.pszText = "ERR";
+						SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
+						sError = true;
+					}
 				}
 			}
-			else{
+			else {
 				socketInfo3D.sin_addr.s_addr = inet_addr(strIP);
 			}
 		}
