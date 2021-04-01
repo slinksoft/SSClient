@@ -355,9 +355,9 @@ extern "C" {
 
 		ZeroMemory(myBuff, MESSAGE_LENGTH * MESSAGE_SIZE);
 		//Server Lists
-		//strcpy(anti3DServerList.host, "master.anti3d.com");
-		//strcpy(anti3DServerList.link, "raw_server_list2.php");
-		//anti3DServerList.port = 80;
+		strcpy(anti3DServerList.host, "www.kaillera.com");
+		strcpy(anti3DServerList.link, "raw_server_list2.php?wg=1&version=0.9");
+		anti3DServerList.port = 80;
 
 		strcpy(kailleraServerList.host, "www.kaillera.com");
 		strcpy(kailleraServerList.link, "raw_server_list2.php?wg=1&version=0.9");
@@ -801,9 +801,9 @@ extern "C" {
 		createChatroom();
 		createInitialWindow();
 
-		Serverlist3DAdditem("Right Click to get Anti3D Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
+		Serverlist3DAdditem("Right Click to get EmuLinker Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
 		kServerlistAdditem("Right Click to get Kaillera Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
-		waitinglistAdditem("Right Click to get Waiting Games.", NULL, NULL, NULL, NULL, NULL, NULL);
+		waitinglistAdditem("--- Non-functional as of now ---", NULL, NULL, NULL, NULL, NULL, NULL);
 
 		//Adjust Parent Window
 		EnableWindow(parent, FALSE);
@@ -2273,7 +2273,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 			}
 			return 0;
 		}
-		//For Anti3D Server List
+		//For EmuLinker Server List
 		case SC_SUPRARECV3D:{
 			switch(WSAGETSELECTEVENT(lParam)){
 				case FD_CONNECT:{
@@ -2466,7 +2466,7 @@ void createInitialWindow(){
 	v.iImage = -1;
 	v.pszText = "Kaillera Server List";
 	TabCtrl_InsertItem(sTab, 0, &v);
-	v.pszText = "Anti3D Server List";
+	v.pszText = "New EmuLinker Server List";
 	TabCtrl_InsertItem(sTab, 1, &v);
 	v.pszText = "Recent List";
 	TabCtrl_InsertItem(sTab, 2, &v);
@@ -3200,12 +3200,13 @@ void parseServerList3D(){
 		}
 		location[w] = '\0';
 		
-
-		Serverlist3DAdditem(serverName, ipAddress, "NA", location, users, games, version);
+		// Parse Emulinker servers only
+		if (strstr(version, "EMX") || strstr(version, "ESF"))
+			Serverlist3DAdditem(serverName, ipAddress, "NA", location, users, games, version);
 	}
 
 	numOfServers = SendMessage(lstServerList3D, LVM_GETITEMCOUNT, 0, 0);
-	wsprintf(strServers, "%i Anti3D Servers Total", numOfServers);
+	wsprintf(strServers, "%i EmuLinker Servers Total", numOfServers);
 	SetWindowText(form1, strServers);
 
 }
@@ -3492,11 +3493,11 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 		bool sError = false;
 		
 		if(lastTabServer == 1 && pingingK == true){
-			sprintf(str, "Pinging Anti3D Server %i of %i", i + 1, total);
+			sprintf(str, "Pinging EmuLinker Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
 		else if(pingingK == false){
-			sprintf(str, "Pinging Anti3D Server %i of %i", i + 1, total);
+			sprintf(str, "Pinging EmuLinker Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
 
@@ -3609,7 +3610,7 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 	ListView_SortItemsEx(lstServerList3D, lstServerlist3DCompareFunc, 0);
 	lstServerlist3DColumn = 0;
 
-	SetWindowText(form1, "Anti3D Pinging Finished!");
+	SetWindowText(form1, "EmuLinker Pinging Finished!");
 	exitPing3DThread();
 	closesocket(mySocket3D);
 	return 0;
@@ -4273,7 +4274,7 @@ void popupMenu(char num){
 			else {
 				if (pinging3D == false) {
 					exitPing3DThread();
-					SetWindowText(form1, "Pinging Anti3D Servers...");
+					SetWindowText(form1, "Pinging EmuLinker Servers...");
 					ping3DThread = CreateThread(NULL, 0, ping3DServers, NULL, 0, NULL);
 				}
 			}
@@ -4286,7 +4287,7 @@ void popupMenu(char num){
 			}
 			else{
 				exitPing3DThread();
-				SetWindowText(form1, "Anti3D Pinging Stopped!");
+				SetWindowText(form1, "EmuLinker Pinging Stopped!");
 			}
 		}	
 		//For Connect
@@ -6420,7 +6421,7 @@ void showServerlist3D(){
 			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
-			wsprintf(str, "%i Anti3D Servers", num);
+			wsprintf(str, "%i EmuLinker Servers", num);
 			SetWindowText(form1, str);
 		}
 }
