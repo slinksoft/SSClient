@@ -355,9 +355,9 @@ extern "C" {
 
 		ZeroMemory(myBuff, MESSAGE_LENGTH * MESSAGE_SIZE);
 		//Server Lists
-		//strcpy(anti3DServerList.host, "master.anti3d.com");
-		//strcpy(anti3DServerList.link, "raw_server_list2.php");
-		//anti3DServerList.port = 80;
+		strcpy(anti3DServerList.host, "www.kaillera.com");
+		strcpy(anti3DServerList.link, "raw_server_list2.php?wg=1&version=0.9");
+		anti3DServerList.port = 80;
 
 		strcpy(kailleraServerList.host, "www.kaillera.com");
 		strcpy(kailleraServerList.link, "raw_server_list2.php?wg=1&version=0.9");
@@ -801,9 +801,9 @@ extern "C" {
 		createChatroom();
 		createInitialWindow();
 
-		Serverlist3DAdditem("Right Click to get Anti3D Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
+		Serverlist3DAdditem("Right Click to get EmuLinker Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
 		kServerlistAdditem("Right Click to get Kaillera Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
-		waitinglistAdditem("Right Click to get Waiting Games.", NULL, NULL, NULL, NULL, NULL, NULL);
+		waitinglistAdditem("--- Non-functional as of now ---", NULL, NULL, NULL, NULL, NULL, NULL);
 
 		//Adjust Parent Window
 		EnableWindow(parent, FALSE);
@@ -2273,7 +2273,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 			}
 			return 0;
 		}
-		//For Anti3D Server List
+		//For EmuLinker Server List
 		case SC_SUPRARECV3D:{
 			switch(WSAGETSELECTEVENT(lParam)){
 				case FD_CONNECT:{
@@ -2466,7 +2466,7 @@ void createInitialWindow(){
 	v.iImage = -1;
 	v.pszText = "Kaillera Server List";
 	TabCtrl_InsertItem(sTab, 0, &v);
-	v.pszText = "Anti3D Server List";
+	v.pszText = "New EmuLinker Server List";
 	TabCtrl_InsertItem(sTab, 1, &v);
 	v.pszText = "Recent List";
 	TabCtrl_InsertItem(sTab, 2, &v);
@@ -3200,12 +3200,13 @@ void parseServerList3D(){
 		}
 		location[w] = '\0';
 		
-
-		Serverlist3DAdditem(serverName, ipAddress, "NA", location, users, games, version);
+		// Parse Emulinker servers only
+		if (strstr(version, "EMX") || strstr(version, "ESF"))
+			Serverlist3DAdditem(serverName, ipAddress, "NA", location, users, games, version);
 	}
 
 	numOfServers = SendMessage(lstServerList3D, LVM_GETITEMCOUNT, 0, 0);
-	wsprintf(strServers, "%i Anti3D Servers Total", numOfServers);
+	wsprintf(strServers, "%i EmuLinker Servers Total", numOfServers);
 	SetWindowText(form1, strServers);
 
 }
@@ -3398,12 +3399,22 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 			if(inet_addr(strIP) == INADDR_NONE){
 				hp = gethostbyname(strAddress);
 				if(hp == NULL){
-					closesocket(mySocketK);
-					b.iItem = i;
-					b.iSubItem = 2;
-					b.pszText = "ERR";
-					SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
-					sError = true;
+					hp = gethostbyname(strIP);
+					if (hp != NULL)
+					{
+						struct in_addr** addr_list;
+						addr_list = (struct in_addr**)hp->h_addr_list;
+						socketInfoK.sin_addr.s_addr = inet_addr(inet_ntoa(*addr_list[0]));
+					}
+					else
+					{
+						closesocket(mySocketK);
+						b.iItem = i;
+						b.iSubItem = 2;
+						b.pszText = "ERR";
+						SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
+						sError = true;
+					}
 				}
 			}
 			else{
@@ -3482,11 +3493,11 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 		bool sError = false;
 		
 		if(lastTabServer == 1 && pingingK == true){
-			sprintf(str, "Pinging Anti3D Server %i of %i", i + 1, total);
+			sprintf(str, "Pinging EmuLinker Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
 		else if(pingingK == false){
-			sprintf(str, "Pinging Anti3D Server %i of %i", i + 1, total);
+			sprintf(str, "Pinging EmuLinker Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
 
@@ -3532,19 +3543,29 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 			sError = true;
 		}
 		
-		if(sError == false){		
-			if(inet_addr(strIP) == INADDR_NONE){
+		if (sError == false) {
+			if (inet_addr(strIP) == INADDR_NONE) {
 				hp = gethostbyname(strAddress);
-				if(hp == NULL){
-					closesocket(mySocket3D);
-					b.iItem = i;
-					b.iSubItem = 2;
-					b.pszText = "ERR";
-					SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
-					sError = true;
+				if (hp == NULL) {
+					hp = gethostbyname(strIP);
+					if (hp != NULL)
+					{
+						struct in_addr** addr_list;
+						addr_list = (struct in_addr**)hp->h_addr_list;
+						socketInfo3D.sin_addr.s_addr = inet_addr(inet_ntoa(*addr_list[0]));
+					}
+					else
+					{
+						closesocket(mySocketK);
+						b.iItem = i;
+						b.iSubItem = 2;
+						b.pszText = "ERR";
+						SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
+						sError = true;
+					}
 				}
 			}
-			else{
+			else {
 				socketInfo3D.sin_addr.s_addr = inet_addr(strIP);
 			}
 		}
@@ -3589,7 +3610,7 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 	ListView_SortItemsEx(lstServerList3D, lstServerlist3DCompareFunc, 0);
 	lstServerlist3DColumn = 0;
 
-	SetWindowText(form1, "Anti3D Pinging Finished!");
+	SetWindowText(form1, "EmuLinker Pinging Finished!");
 	exitPing3DThread();
 	closesocket(mySocket3D);
 	return 0;
@@ -4253,7 +4274,7 @@ void popupMenu(char num){
 			else {
 				if (pinging3D == false) {
 					exitPing3DThread();
-					SetWindowText(form1, "Pinging Anti3D Servers...");
+					SetWindowText(form1, "Pinging EmuLinker Servers...");
 					ping3DThread = CreateThread(NULL, 0, ping3DServers, NULL, 0, NULL);
 				}
 			}
@@ -4266,7 +4287,7 @@ void popupMenu(char num){
 			}
 			else{
 				exitPing3DThread();
-				SetWindowText(form1, "Anti3D Pinging Stopped!");
+				SetWindowText(form1, "EmuLinker Pinging Stopped!");
 			}
 		}	
 		//For Connect
@@ -5103,6 +5124,21 @@ void displayGameChatroomAsServer(char *msg){
 	
 	//Display
 	displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(34, 139, 34));
+}
+
+void displayGameChatroomAsClientSpamProtect(char* msg) {
+	char temp[2048];
+
+	//Previous (CRLF) 
+	//<Server> Message (CRLF)
+
+
+	strcpy(temp, "<Client> ");
+	strcat(temp, msg);
+	strcat(temp, "\r\n");
+
+	//Display
+	displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(155, 0, 0));
 }
 
 
@@ -6385,7 +6421,7 @@ void showServerlist3D(){
 			SetWindowText(form1, "SupraSlinkClient - Slink Soft Productions & SupraFast");
 		}
 		else{
-			wsprintf(str, "%i Anti3D Servers", num);
+			wsprintf(str, "%i EmuLinker Servers", num);
 			SetWindowText(form1, str);
 		}
 }
@@ -6554,7 +6590,7 @@ void userQuitNotification(unsigned short position, int slot){
 	timeinfo = localtime(&rawtime);
 	strftime(buffer, 80, "-:%I:%M:%S %p: ", timeinfo);
 
-	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Quit the Server: ");
@@ -6665,7 +6701,7 @@ void userJoined(unsigned short position, int slot){
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 	strcpy(temp,"<");
 	strcat(temp, nick);
 	strcat(temp,"> Joined the Server\r\n");
@@ -7304,35 +7340,105 @@ void gameChatNotification(unsigned short position, int slot){
 
 	//Message
     strSize = strlen(&myBuff[slot].myBuff[i]);
-	memcpy(message, &myBuff[slot].myBuff[i], strSize + 1);
 
-	//Game Callback
-	if(gamePlaying == true && kInfo.chatReceivedCallback != NULL){
-		if (useScreenChatValue == BST_CHECKED)
-			kInfo.chatReceivedCallback(nick, message);
-	}
+	if (strSize > 225)
+	{
+		memcpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
-	//Show Green if it's <Server>
-	if(nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0'){
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
+
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsClientSpamProtect(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
 		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
-		displayGameChatroomAsServer(message);
-		return;
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
 	}
 
-	//Previous (CRLF) 
-	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
-	strcpy(temp, "<");
-	strcat(temp, nick);
-	strcat(temp,"> ");
-	strcat(temp,message);
-	strcat(temp,"\r\n");
+	else if (strchr(&myBuff[slot].myBuff[i], '\n'))
+	{
+		memcpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
-	//Display
-	displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
 
-	//Log
-	saveGameroomLog(temp);
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsClientSpamProtect(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
+	}
+	else
+	{
+		memcpy(message, &myBuff[slot].myBuff[i], strSize + 1);
+
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
+
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsServer(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
+
+	}
 }
 
 
@@ -7417,7 +7523,7 @@ void createGameNotification(unsigned short position, int slot){
 
 	//Previous (CRLF) 
 	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+	displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 	strcpy(temp, "<");
 	strcat(temp, owner);
 	strcat(temp, "> Created Game: ");
@@ -8048,7 +8154,7 @@ void closeGameNotification(unsigned short position, int slot){
 
 		//Previous (CRLF) 
 		//<Nick> Message (CRLF)
-		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122));
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
 		strcpy(temp,"<");
 		strcat(temp, owner);
 		strcat(temp, "> ");
@@ -8334,39 +8440,116 @@ void serverInformationMessage(unsigned short position, int slot){
     strSize = strlen(&myBuff[slot].myBuff[i]);
 	strncpy(nick, &myBuff[slot].myBuff[i], strSize + 1);
 	i = i + strSize + 1;
+
 	//Message
     strSize = strlen(&myBuff[slot].myBuff[i]);
-	strncpy(message, &myBuff[slot].myBuff[i], strSize + 1);
-	i = i + strSize + 1;
+	if (strSize > 225)
+	{
+		strncpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
-	if(strncmp(message, "VERSION:", 8) == 0){
-		MessageBox(form1, &message[8], "Server Version", NULL);
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, "Client");
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(155, 0, 0));
+
 		//Log
 		saveChatroomLog(temp);
-		return;
 	}
-	else if(strncmp(message, "sccppevercheck", 8) == 0){
-		temp[0] = 'd';
-		strcpy(&temp[1], cVersion);
-		j = strlen(temp) + 1;
-		temp[0] = '\0';
-		constructPacket(temp, j, 0x07);
+	else if (strchr(&myBuff[slot].myBuff[i], '\n'))
+	{
+		strncpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
+
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, "Client");
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(155, 0, 0));
+
+		//Log
+		saveChatroomLog(temp);
+	}
+	else
+	{
+		strncpy(message, &myBuff[slot].myBuff[i], strSize + 1);
+
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(34, 139, 34));
+
+		//Log
+		saveChatroomLog(temp);
 	}
 
-	//Previous (CRLF)
-	//<Nick> Message (CRLF)
-	displayAndAutoScrollRichEdit(txtChatroom,buffer, RGB(0, 0, 122));
-	strcpy(temp,"<");
-	strcat(temp, nick);
-	strcat(temp,"> ");
-	strcat(temp,message);
-	strcat(temp,"\r\n");
 	
-	//Display
-	displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(34, 139, 34));
-
-	//Log
-	saveChatroomLog(temp);
 }
 
 
