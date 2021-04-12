@@ -355,8 +355,9 @@ extern "C" {
 
 		ZeroMemory(myBuff, MESSAGE_LENGTH * MESSAGE_SIZE);
 		//Server Lists
-		strcpy(anti3DServerList.host, "www.kaillera.com");
-		strcpy(anti3DServerList.link, "raw_server_list2.php?wg=1&version=0.9");
+		strcpy(anti3DServerList.host, "170.39.225.176");
+		strcpy(anti3DServerList.link, "server_list.php");
+		strcpy(anti3DServerList.wglink, "game_list.php");
 		anti3DServerList.port = 80;
 
 		strcpy(kailleraServerList.host, "www.kaillera.com");
@@ -2257,10 +2258,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 					waiting = true;
 					//Http GET Request
 					strcpy(dataToBeSent, "GET /");
-					strcat(dataToBeSent, kailleraServerList.link);
+					strcat(dataToBeSent, anti3DServerList.wglink);
 					strcat(dataToBeSent, " HTTP/1.0\r\n");
 					strcat(dataToBeSent, "Host: ");
-					strcat(dataToBeSent, kailleraServerList.host);
+					strcat(dataToBeSent, anti3DServerList.host);
 					strcat(dataToBeSent,"\r\n\r\n");
 					send(mySocketWaiting, dataToBeSent, strlen(dataToBeSent) + 1, NULL);
 					return 0;
@@ -2279,10 +2280,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 				case FD_CONNECT:{
 					//Http GET Request
 					strcpy(dataToBeSent, "GET /");
-					strcat(dataToBeSent, anti3DServerList.link);
+					strcat(dataToBeSent, kailleraServerList.link);
 					strcat(dataToBeSent, " HTTP/1.0\r\n");
 					strcat(dataToBeSent, "Host: ");
-					strcat(dataToBeSent, anti3DServerList.host);
+					strcat(dataToBeSent, kailleraServerList.host);
 					strcat(dataToBeSent,"\r\n\r\n");
 					send(mySocket3D, dataToBeSent, strlen(dataToBeSent) + 1, NULL);
 					return 0;
@@ -3460,7 +3461,8 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 	kailleraSwitch = false;
 	lstServerlistKColumn = 2;
 	ListView_SortItemsEx(lstServerListK, lstServerlistKCompareFunc, 0);
-	lstServerlistKColumn = 0;
+	lstServerlistKColumn = 4;
+	kailleraSwitch = true;
 
 	SetWindowText(form1, "Kaillera Pinging Finished!");
 	exitPingKThread();
@@ -3608,7 +3610,8 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 	anti3DSwitch = false;
 	lstServerlist3DColumn = 2;
 	ListView_SortItemsEx(lstServerList3D, lstServerlist3DCompareFunc, 0);
-	lstServerlist3DColumn = 0;
+	lstServerlist3DColumn = 4;
+	anti3DSwitch = true;
 
 	SetWindowText(form1, "EmuLinker Pinging Finished!");
 	exitPing3DThread();
@@ -8726,19 +8729,19 @@ void getServerList3D(){
 
 	mySocket3D = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	socketInfo3D.sin_family = AF_INET;
-    socketInfo3D.sin_port = htons((u_short)anti3DServerList.port);
+    socketInfo3D.sin_port = htons((u_short)kailleraServerList.port);
 
-	if(inet_addr(anti3DServerList.host) == INADDR_NONE){
-		remoteHost = gethostbyname(anti3DServerList.host);
+	if(inet_addr(kailleraServerList.host) == INADDR_NONE){
+		remoteHost = gethostbyname(kailleraServerList.host);
 	}
 	else{
-		addr = inet_addr(anti3DServerList.host);
+		addr = inet_addr(kailleraServerList.host);
 		remoteHost = gethostbyaddr((char*)&addr, sizeof(addr), AF_INET);
 	}
 
 	if(remoteHost == NULL){
 		closesocket(mySocket3D);
-		MessageBox(form1, "Could not resolve Server List!  Server may be down", "Error Resolving Address!", NULL);
+		MessageBox(form1, "Could not resolve Server List!  Server may be down.", "Error Resolving Address!", NULL);
 		return;
 	}
 
@@ -8750,7 +8753,8 @@ void getServerList3D(){
 
 }
 
-void getWaitingGames(){
+
+void getWaitingGames() {
 	hostent* remoteHost;
 	unsigned long addr;
 	int x;
@@ -8760,30 +8764,28 @@ void getWaitingGames(){
 
 	mySocketWaiting = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	socketInfoWaiting.sin_family = AF_INET;
-    socketInfoWaiting.sin_port = htons((u_short)kailleraServerList.port);
+	socketInfoWaiting.sin_port = htons((u_short)anti3DServerList.port);
 
-	if(inet_addr(kailleraServerList.host) == INADDR_NONE){
-		remoteHost = gethostbyname(kailleraServerList.host);
+	if (inet_addr(anti3DServerList.host) == INADDR_NONE) {
+		remoteHost = gethostbyname(anti3DServerList.host);
+		if (remoteHost == NULL) {
+			closesocket(mySocketWaiting);
+			MessageBox(form1, "Could not resolve Server List!  Server may be down.", "Error Resolving Address!", NULL);
+			return;
+		}
+		else socketInfoWaiting.sin_addr.s_addr = *((unsigned long*)remoteHost->h_addr);
 	}
-	else{
-		addr = inet_addr(kailleraServerList.host);
-		remoteHost = gethostbyaddr((char*)&addr, sizeof(addr), AF_INET);
+	else {
+		socketInfoWaiting.sin_addr.s_addr = inet_addr(anti3DServerList.host);
 	}
-
-	if(remoteHost == NULL){
-		closesocket(mySocketK);
-		MessageBox(form1, "Could not resolve Server List!  Server may be down", "Error Resolving Address!", NULL);
-		return;
-	}
-
-    socketInfoWaiting.sin_addr.s_addr = *((unsigned long*)remoteHost->h_addr);
 
 	WSAAsyncSelect(mySocketWaiting, form1, SC_SUPRARECVWAITING, FD_WRITE | FD_CONNECT | FD_READ | FD_CLOSE);
-    x = connect(mySocketWaiting, (sockaddr *) &socketInfoWaiting, sizeof(socketInfoWaiting));
+	x = connect(mySocketWaiting, (sockaddr*)&socketInfoWaiting, sizeof(socketInfoWaiting));
 	SetWindowText(form1, "Sending GET Request...If a list doesn't arrive within a few seconds, the host is probably down!");
 }
 
-void getServerListK(){
+
+void getServerListK() {
 	hostent* remoteHost;
 	unsigned long addr;
 	int x;
@@ -8794,28 +8796,26 @@ void getServerListK(){
 
 	mySocketK = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	socketInfoK.sin_family = AF_INET;
-    socketInfoK.sin_port = htons((u_short)kailleraServerList.port);
+	socketInfoK.sin_port = htons((u_short)kailleraServerList.port);
 
-	if(inet_addr(kailleraServerList.host) == INADDR_NONE){
+	if (inet_addr(kailleraServerList.host) == INADDR_NONE) {
 		remoteHost = gethostbyname(kailleraServerList.host);
+		if (remoteHost == NULL) {
+			closesocket(mySocketWaiting);
+			MessageBox(form1, "Could not resolve Server List!  Server may be down", "Error Resolving Address!", NULL);
+			return;
+		}
+		else socketInfoK.sin_addr.s_addr = *((unsigned long*)remoteHost->h_addr);
 	}
-	else{
-		addr = inet_addr(kailleraServerList.host);
-		remoteHost = gethostbyaddr((char*)&addr, sizeof(addr), AF_INET);
+	else {
+		socketInfoK.sin_addr.s_addr = inet_addr(kailleraServerList.host);
 	}
-
-	if(remoteHost == NULL){
-		closesocket(mySocketK);
-		MessageBox(form1, "Could not resolve Server List!  Server may be down", "Error Resolving Address!", NULL);
-		return;
-	}
-
-    socketInfoK.sin_addr.s_addr = *((unsigned long*)remoteHost->h_addr);
 
 	WSAAsyncSelect(mySocketK, form1, SC_SUPRARECVK, FD_WRITE | FD_CONNECT | FD_READ | FD_CLOSE);
-    x = connect(mySocketK, (sockaddr *) &socketInfoK, sizeof(socketInfoK));
+	x = connect(mySocketK, (sockaddr*)&socketInfoK, sizeof(socketInfoK));
 	SetWindowText(form1, "Sending GET Request...If a list doesn't arrive within a few seconds, the host is probably down!");
 }
+
 
 
 void saveChatroomLog(char text[]){
