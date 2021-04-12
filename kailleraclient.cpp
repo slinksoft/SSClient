@@ -804,7 +804,7 @@ extern "C" {
 
 		Serverlist3DAdditem("Right Click to get EmuLinker Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
 		kServerlistAdditem("Right Click to get Kaillera Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
-		waitinglistAdditem("--- Non-functional as of now ---", NULL, NULL, NULL, NULL, NULL, NULL);
+		waitinglistAdditem("Right Click to get ESF & EMX Waiting Games List.", NULL, NULL, NULL, NULL, NULL, NULL);
 
 		//Adjust Parent Window
 		EnableWindow(parent, FALSE);
@@ -2473,7 +2473,7 @@ void createInitialWindow(){
 	TabCtrl_InsertItem(sTab, 2, &v);
 	v.pszText = "Favorites List";
 	TabCtrl_InsertItem(sTab, 3, &v);
-	v.pszText = "Waiting Games List";
+	v.pszText = "EmuLinker Waiting Games List";
 	TabCtrl_InsertItem(sTab, 4, &v);
 
 
