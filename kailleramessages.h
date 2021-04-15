@@ -187,6 +187,7 @@ HWND btnDrop;
 //HWND btnP2PConnect;
 HWND chkJoinChatGame;
 HWND btnVersion;
+HWND btnAC;
 //HWND txtP2PServer;
 //HWND lblP2PServer;
 //char p2pServer[1024];
@@ -508,10 +509,10 @@ char emulator[128];
 char serverIP[1024] = "127.0.0.1:27888\0";
 unsigned long myPing;
 //################
-char myVersion[12] = "SSC v3.2.8\0";
-char cVersion[35] = "SupraSlinkClient X v3.2.8 - Final\0";
-char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.2.8 Final Version - April 11, 2021\r\n\nSpecial Thanks to: OGenDroX, LeafChicken, Jgunishka, Trac, Moosehead, & r@z\r\n\nTesters: OGenDroX, gav (Nova), LeafChicken, Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser (base client and all his amazing work)\nSlink - Dan (merging EmulinkerSF and Emulinker X, enhancing Supra Client to Slink Client, adding additional features, optimizing performance and enhancing security)\nRad - Hosting alternative EmuLinker list (fixes waiting games and will back up the master server list in case it does down)\nJgunishka - Maintaining Emulinker SF\r\n\nEmail: realslinksoft@gmail.com\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
-char quit[1024] = "SupraSlinkClient X v3.2.8 Final (Slink's Enhanced Features & Advanced Security) - April 11, 2021\0";
+char myVersion[12] = "SSC v3.3.0\0";
+char cVersion[35] = "SupraSlinkClient X v3.3.0 - Final\0";
+char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.3.0 Final Version - April 15, 2021\r\n\nSpecial Thanks to: OGenDroX, LeafChicken, Jgunishka, Trac, Moosehead, & r@z\r\n\nTesters: OGenDroX, gav (Nova), LeafChicken, Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser (base client and all his amazing work)\nSlink - Dan (merging EmulinkerSF and Emulinker X, enhancing Supra Client to Slink Client, adding additional features, optimizing performance and enhancing security)\nRad - Hosting alternative EmuLinker list (fixes waiting games and will back up the master server list in case it does down)\nJgunishka - Maintaining Emulinker SF\r\n\nEmail: realslinksoft@gmail.com\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
+char quit[1024] = "SupraSlinkClient X v3.3.0 Final (Slink's Enhanced Features & Advanced Security) - April 15, 2021\0";
 //################
 bool chatroom;
 

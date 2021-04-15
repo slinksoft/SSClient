@@ -1549,6 +1549,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 						temp[0] = '\0';
 						constructPacket(temp, i, 0x07);							
 					}
+					else if (hwndCtl == btnAC && myUserID != -1) {
+					temp[0] = 'd';
+					strcpy(&temp[1], "/alivecheck");
+					i = strlen(temp) + 1;
+					temp[0] = '\0';
+					constructPacket(temp, i, 0x07);
+					}
 					else if(hwndCtl == btnLagStat){
 						temp[0] = 'd';
 						strcpy(&temp[1], "/lagstat");
@@ -2490,11 +2497,11 @@ void createInitialWindow(){
 	lblMaxPing = CreateWindowEx(controlStyles, "STATIC", "Max Ping:", labelProperties, 75, 505, 60, 15, form1, NULL, hInstance, NULL);
 	SendMessage(lblMaxPing, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Use EmulinkerX Options
-	chkEmulinkerX = CreateWindowEx(controlStyles, "BUTTON", "Use Extended Options?", checkProperties, 325, 535, 140, 25, form1, NULL, hInstance, NULL);
+	chkEmulinkerX = CreateWindowEx(controlStyles, "BUTTON", "Use Extended Options?", checkProperties, 300, 535, 140, 25, form1, NULL, hInstance, NULL);
 	SendMessage(chkEmulinkerX, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(chkEmulinkerX, BM_SETCHECK, EmulinkerXValue, 0);
 	//Fake P2P Options
-	chkFakeP2P = CreateWindowEx(controlStyles, "BUTTON", "Use Fake P2P?", checkProperties, 325, 505, 100, 25, form1, NULL, hInstance, NULL);
+	chkFakeP2P = CreateWindowEx(controlStyles, "BUTTON", "Use Fake P2P?", checkProperties, 300, 505, 100, 25, form1, NULL, hInstance, NULL);
 	SendMessage(chkFakeP2P, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(chkFakeP2P, BM_SETCHECK, fakeP2PValue, 0);
 	//Emulator Restriction
@@ -2508,6 +2515,9 @@ void createInitialWindow(){
 	//Version
 	btnVersion = CreateWindowEx(controlStyles, "BUTTON", "Server Version", buttonProperties, 500, 530, 80, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnVersion, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Alive Check
+	btnAC = CreateWindowEx(controlStyles, "BUTTON", "Alive Check", buttonProperties, 400, 505, 80, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnAC, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 
 
 	//P2P
@@ -7044,6 +7054,7 @@ void showOptions(char show){
 		ShowWindow(chkEmuRes, SW_HIDE);
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
+		ShowWindow(btnAC, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7093,6 +7104,7 @@ void showOptions(char show){
 		ShowWindow(chkEmuRes, SW_HIDE);
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
+		ShowWindow(btnAC, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7142,6 +7154,7 @@ void showOptions(char show){
 		ShowWindow(chkEmuRes, SW_HIDE);
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
+		ShowWindow(btnAC, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7191,6 +7204,7 @@ void showOptions(char show){
 		ShowWindow(chkEmuRes, SW_SHOW);
 		ShowWindow(chkConnRes, SW_SHOW);
 		ShowWindow(btnVersion, SW_SHOW);
+		ShowWindow(btnAC, SW_SHOW);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7235,6 +7249,7 @@ void showOptions(char show){
 		ShowWindow(chkEmuRes, SW_HIDE);
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
+		ShowWindow(btnAC, SW_HIDE);
 
 		ShowWindow(lblP2PServer, SW_SHOW);
 		ShowWindow(txtP2PServer, SW_SHOW);
@@ -8458,6 +8473,11 @@ void serverInformationMessage(unsigned short position, int slot){
 			saveChatroomLog(temp);
 			return;
 		}
+		if (strncmp(message, ":ALIVECHECK=", 8) == 0) {
+			MessageBox(form1, &message[12], "Slink Client Alive Check", NULL);
+			//Log
+			saveChatroomLog(temp);
+		}
 		else if (strncmp(message, "sccppevercheck", 8) == 0) {
 			temp[0] = 'd';
 			strcpy(&temp[1], cVersion);
@@ -8493,6 +8513,11 @@ void serverInformationMessage(unsigned short position, int slot){
 			saveChatroomLog(temp);
 			return;
 		}
+		if (strncmp(message, ":ALIVECHECK=", 8) == 0) {
+			MessageBox(form1, &message[12], "Slink Client Alive Check", NULL);
+			//Log
+			saveChatroomLog(temp);
+		}
 		else if (strncmp(message, "sccppevercheck", 8) == 0) {
 			temp[0] = 'd';
 			strcpy(&temp[1], cVersion);
@@ -8527,6 +8552,11 @@ void serverInformationMessage(unsigned short position, int slot){
 			//Log
 			saveChatroomLog(temp);
 			return;
+		}
+		if (strncmp(message, ":ALIVECHECK=", 8) == 0) {
+			MessageBox(form1, &message[12], "Slink Client Alive Check", NULL);
+			//Log
+			saveChatroomLog(temp);
 		}
 		else if (strncmp(message, "sccppevercheck", 8) == 0) {
 			temp[0] = 'd';
