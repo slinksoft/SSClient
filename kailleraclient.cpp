@@ -7358,8 +7358,43 @@ void gameChatNotification(unsigned short position, int slot){
 
 	//Message
     strSize = strlen(&myBuff[slot].myBuff[i]);
+	
+	// check if message contains rules
+	string s = &myBuff[slot].myBuff[i];
 
-	if (strSize > 225)
+	if (s.find( "Rules") != string::npos)
+	{
+		memcpy(message, &myBuff[slot].myBuff[i], strSize + 1);
+
+		//Game Callback
+		if (gamePlaying == true && kInfo.chatReceivedCallback != NULL) {
+			if (useScreenChatValue == BST_CHECKED)
+				kInfo.chatReceivedCallback(nick, message);
+		}
+
+		//Show Green if it's <Server>
+		if (nick[0] == 'S' && nick[1] == 'e' && nick[2] == 'r' && nick[3] == 'v' && nick[4] == 'e' && nick[5] == 'r' && nick[6] == '\0') {
+			displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+			displayGameChatroomAsServer(message);
+			return;
+		}
+
+		//Previous (CRLF) 
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtGameChatroom, buffer, RGB(0, 0, 122));
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+
+		//Log
+		saveGameroomLog(temp);
+	}
+	else if (strSize > 500)
 	{
 		memcpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
@@ -8461,7 +8496,51 @@ void serverInformationMessage(unsigned short position, int slot){
 
 	//Message
     strSize = strlen(&myBuff[slot].myBuff[i]);
-	if (strSize > 225)
+
+	// check if message contains rules
+	string s = &myBuff[slot].myBuff[i];
+
+	if (s.find("Rules") != string::npos)
+	{
+		strncpy(message, &myBuff[slot].myBuff[i], strSize + 1);
+
+		i = i + strSize + 1;
+
+		if (strncmp(message, "VERSION:", 8) == 0) {
+			MessageBox(form1, &message[8], "Server Version", NULL);
+			//Log
+			saveChatroomLog(temp);
+			return;
+		}
+		if (strncmp(message, ":ALIVECHECK=", 8) == 0) {
+			MessageBox(form1, &message[12], "Slink Client Alive Check", NULL);
+			//Log
+			saveChatroomLog(temp);
+		}
+		else if (strncmp(message, "sccppevercheck", 8) == 0) {
+			temp[0] = 'd';
+			strcpy(&temp[1], cVersion);
+			j = strlen(temp) + 1;
+			temp[0] = '\0';
+			constructPacket(temp, j, 0x07);
+		}
+
+		//Previous (CRLF)
+		//<Nick> Message (CRLF)
+		displayAndAutoScrollRichEdit(txtChatroom, buffer, RGB(0, 0, 122)); // time stamp
+		strcpy(temp, "<");
+		strcat(temp, nick);
+		strcat(temp, "> ");
+		strcat(temp, message);
+		strcat(temp, "\r\n");
+
+		//Display
+		displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(34, 139, 34));
+
+		//Log
+		saveChatroomLog(temp);
+	}
+	else if (strSize > 500)
 	{
 		strncpy(message, "Detected Spam Attack From Another User. Client Blocking Message.", strSize + 1);
 
