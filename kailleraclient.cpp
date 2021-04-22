@@ -1556,6 +1556,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 					temp[0] = '\0';
 					constructPacket(temp, i, 0x07);
 					}
+
+					else if (hwndCtl == btnHG && myUserID != -1) {
+					
+					EnableWindow(form1, FALSE);
+					createCGWindow();
+
+					if (strlen(fCG) == NULL)
+					{
+						//do nothing
+					}
+					else
+					{
+						strcpy(currentGame, fCG);
+
+						char dataToBeSent[1024];
+						int gameLength;
+						dataToBeSent[0] = 0x00;
+
+						//Get Game
+						strcpy(&dataToBeSent[1], currentGame);
+						gameLength = strlen(currentGame);
+
+						dataToBeSent[1 + gameLength + 1] = 0x00;
+						dataToBeSent[1 + gameLength + 2] = 0xFF;
+						dataToBeSent[1 + gameLength + 3] = 0xFF;
+						dataToBeSent[1 + gameLength + 4] = 0xFF;
+						dataToBeSent[1 + gameLength + 5] = 0xFF;
+
+						constructPacket(dataToBeSent, (1 + gameLength + 1 + 5), 0x0A);
+						showGameroom(true);
+						SendMessage(txtGame, WM_SETTEXT, 0, (LPARAM)currentGame);
+
+						myGameID = 0xFFFF;
+						strcpy(gOwner, username);
+						strcpy(gEmulator, emulator);
+						fixLastGameToPlay();
+						saveConfig();
+					}
+
+					}
 					else if(hwndCtl == btnLagStat){
 						temp[0] = 'd';
 						strcpy(&temp[1], "/lagstat");
@@ -1580,6 +1620,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 						cPM = true;
 						SendMessage(txtPM, WM_GETTEXT, 1024, (LPARAM) fPM);
 						DestroyWindow(frmPM);
+					}
+					else if (hwndCtl == btnCG) {
+					cCG = true;
+					SendMessage(txtCG, WM_GETTEXT, 1024, (LPARAM)fCG);
+					DestroyWindow(frmCG);
 					}
 					else if(hwndCtl == btnChat)
 						globalChatRequest();
@@ -2492,32 +2537,35 @@ void createInitialWindow(){
 	SendMessage(lblMaxUsers, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	if (atoi(maxPingG) < 1 || atoi(maxPingG) > 1000)
 		wsprintf(maxPingG, "%i", 200);
-	txtMaxPing = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", maxPingG, textboxProperties, 75, 520, 60, 25, form1, NULL, hInstance, NULL);
+	txtMaxPing = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", maxPingG, textboxProperties, 70, 520, 50, 25, form1, NULL, hInstance, NULL);
 	SendMessage(txtMaxPing, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
-	lblMaxPing = CreateWindowEx(controlStyles, "STATIC", "Max Ping:", labelProperties, 75, 505, 60, 15, form1, NULL, hInstance, NULL);
+	lblMaxPing = CreateWindowEx(controlStyles, "STATIC", "Max Ping:", labelProperties, 70, 505, 50, 15, form1, NULL, hInstance, NULL);
 	SendMessage(lblMaxPing, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Use EmulinkerX Options
-	chkEmulinkerX = CreateWindowEx(controlStyles, "BUTTON", "Use Extended Options?", checkProperties, 300, 535, 140, 25, form1, NULL, hInstance, NULL);
+	chkEmulinkerX = CreateWindowEx(controlStyles, "BUTTON", "Use Extended Options?", checkProperties, 275, 535, 135, 25, form1, NULL, hInstance, NULL);
 	SendMessage(chkEmulinkerX, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(chkEmulinkerX, BM_SETCHECK, EmulinkerXValue, 0);
 	//Fake P2P Options
-	chkFakeP2P = CreateWindowEx(controlStyles, "BUTTON", "Use Fake P2P?", checkProperties, 300, 505, 100, 25, form1, NULL, hInstance, NULL);
+	chkFakeP2P = CreateWindowEx(controlStyles, "BUTTON", "Use Fake P2P?", checkProperties, 275, 505, 100, 25, form1, NULL, hInstance, NULL);
 	SendMessage(chkFakeP2P, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(chkFakeP2P, BM_SETCHECK, fakeP2PValue, 0);
 	//Emulator Restriction
-	chkEmuRes = CreateWindowEx(controlStyles, "BUTTON", "Restrict Emulator?", checkProperties, 150, 505, 105, 25, form1, NULL, hInstance, NULL);
+	chkEmuRes = CreateWindowEx(controlStyles, "BUTTON", "Restrict Emulator?", checkProperties, 125, 505, 105, 25, form1, NULL, hInstance, NULL);
 	SendMessage(chkEmuRes, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(chkEmuRes, BM_SETCHECK, emuResValue, 0);
 	//Connection Restriction
-	chkConnRes = CreateWindowEx(controlStyles, "BUTTON", "Restrict Connection Type?", checkProperties, 150, 535, 145, 25, form1, NULL, hInstance, NULL);
+	chkConnRes = CreateWindowEx(controlStyles, "BUTTON", "Restrict Connection Type?", checkProperties, 125, 535, 145, 25, form1, NULL, hInstance, NULL);
 	SendMessage(chkConnRes, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(chkConnRes, BM_SETCHECK, connResValue, 0);
 	//Version
 	btnVersion = CreateWindowEx(controlStyles, "BUTTON", "Server Version", buttonProperties, 500, 530, 80, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnVersion, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Alive Check
-	btnAC = CreateWindowEx(controlStyles, "BUTTON", "Alive Check", buttonProperties, 400, 505, 80, 25, form1, NULL, hInstance, NULL);
+	btnAC = CreateWindowEx(controlStyles, "BUTTON", "Alive Check", buttonProperties, 410, 505, 70, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnAC, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Custom Game
+	btnHG = CreateWindowEx(controlStyles, "BUTTON", "Host Custom", buttonProperties, 410, 530, 70, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnHG, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 
 
 	//P2P
@@ -2941,6 +2989,29 @@ void createPMWindow(){
 	}
 }
 
+void createCGWindow() {
+	RECT b;
+
+	//Get Window Position
+	GetWindowRect(form1, &b);
+
+	frmCG = CreateWindow("SupraSlinkClient", "Enter a room name:", formOtherProperties, b.left + 110, b.top + 200, 330, 80, form1, NULL, hInstance, NULL);
+	//Subject
+	txtCG = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", NULL, textboxProperties, 5, 10, 250, 25, frmCG, NULL, hInstance, NULL);
+	SendMessage(txtCG, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Create New
+	btnCG = CreateWindowEx(controlStyles, "BUTTON", "Host", buttonProperties, 260, 10, 60, 25, frmCG, NULL, hInstance, NULL);
+	SendMessage(btnCG, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+
+	cCG = false;
+	strcpy(fCG, "");
+
+	while (cCG == false) {
+		SwitchToThread();
+		DoEvents();
+		Sleep(1);
+	}
+}
 
 void createAwayWindow(){
 	int i;
@@ -5810,6 +5881,14 @@ bool supraCleanup(char type, HWND h){
 			UpdateWindow(form1);
 			return false;
 		}
+		else if (h == frmCG) {
+			cCG = true;
+			ShowWindow(frmCG, SW_HIDE);
+			EnableWindow(form1, TRUE);
+			SetFocus(form1);
+			UpdateWindow(form1);
+			return false;
+		}
 		else if(h == frmComments){
 			cComments = true;
 			ShowWindow(frmComments, SW_HIDE);
@@ -7055,6 +7134,7 @@ void showOptions(char show){
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
+		ShowWindow(btnHG, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7105,6 +7185,7 @@ void showOptions(char show){
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
+		ShowWindow(btnHG, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7155,6 +7236,7 @@ void showOptions(char show){
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
+		ShowWindow(btnHG, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7205,6 +7287,7 @@ void showOptions(char show){
 		ShowWindow(chkConnRes, SW_SHOW);
 		ShowWindow(btnVersion, SW_SHOW);
 		ShowWindow(btnAC, SW_SHOW);
+		ShowWindow(btnHG, SW_SHOW);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7250,6 +7333,7 @@ void showOptions(char show){
 		ShowWindow(chkConnRes, SW_HIDE);
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
+		ShowWindow(btnHG, SW_HIDE);
 
 		ShowWindow(lblP2PServer, SW_SHOW);
 		ShowWindow(txtP2PServer, SW_SHOW);
