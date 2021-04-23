@@ -1323,7 +1323,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 	int iSelect;
 	LVITEM b;
 	LVFINDINFO c;
-
+	
+	//----------------------------------------------------------
 	switch(message){
 		case WM_COMMAND:{
 			switch(wParam){
