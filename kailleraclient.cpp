@@ -355,8 +355,8 @@ extern "C" {
 
 		ZeroMemory(myBuff, MESSAGE_LENGTH * MESSAGE_SIZE);
 		//Server Lists
-		strcpy(anti3DServerList.host, "170.39.225.176");
-		strcpy(anti3DServerList.link, "server_list.php");
+		strcpy(anti3DServerList.host, "127.0.0.1");
+		strcpy(anti3DServerList.link, "read.php");
 		strcpy(anti3DServerList.wglink, "game_list.php");
 		anti3DServerList.port = 80;
 
@@ -2333,12 +2333,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 				case FD_CONNECT:{
 					//Http GET Request
 					strcpy(dataToBeSent, "GET /");
-					strcat(dataToBeSent, kailleraServerList.link);
+					strcat(dataToBeSent, anti3DServerList.link);
 					strcat(dataToBeSent, " HTTP/1.0\r\n");
 					strcat(dataToBeSent, "Host: ");
-					strcat(dataToBeSent, kailleraServerList.host);
+					strcat(dataToBeSent, anti3DServerList.host);
 					strcat(dataToBeSent,"\r\n\r\n");
 					send(mySocket3D, dataToBeSent, strlen(dataToBeSent) + 1, NULL);
+
 					return 0;
 				}
 				case FD_READ:{
@@ -3217,10 +3218,11 @@ void parseServerList3D(){
 
 	//Find First NULL.  Anything before this is the Waiting Games List
 	i = 0;
-	while(s[i] != '\n' && i < total){
+	/*while (s[i] != '\n' && i < total) {
 		i = i + 1;
 	}
 	i = i + 1;
+	*/
 
 	//Parse Server List
 	for(i = i; i < total; i++){
@@ -3283,10 +3285,17 @@ void parseServerList3D(){
 		}
 		location[w] = '\0';
 		
+		/* 1-29-2023 : Removing implementation due to development work for master list preservation
 		// Parse Emulinker servers only
 		if (strstr(version, "EMX") || strstr(version, "ESF"))
 			Serverlist3DAdditem(serverName, ipAddress, "NA", location, users, games, version);
+	     */
+
+		Serverlist3DAdditem(serverName, ipAddress, "NA", location, users, games, version);
+
 	}
+
+	
 
 	numOfServers = SendMessage(lstServerList3D, LVM_GETITEMCOUNT, 0, 0);
 	wsprintf(strServers, "%i EmuLinker Servers Total", numOfServers);
@@ -3394,6 +3403,13 @@ void parseServerListK(){
 		}
 		location[w] = '\0';
 		
+		//skips spam servers; credits to Jgunishka
+		if (strstr(serverName, "kofip") ||
+			strcmp(version, "0.97") == 0 ||
+			strcmp(version, "0.98") == 0 ||
+			strcmp(version, "0.99") == 0 ||
+			strcmp(version, "1.00") == 0 ||
+			strcmp(version, "1.01") == 0) continue;
 
 		kServerlistAdditem(serverName, ipAddress, "NA", location, users, games, version);
 	}
@@ -3404,12 +3420,12 @@ void parseServerListK(){
 }
 
 
-DWORD WINAPI pingKailleraServers(LPVOID lpParam){
+DWORD WINAPI pingKailleraServers(LPVOID lpParam) {
 	unsigned short port;
 	int buff;
 	int i;
 	char str[1024];
-	char strPing [1024];
+	char strPing[1024];
 	char strIP[1024];
 	char strPort[1024];
 	char strAddress[1024];
@@ -3419,19 +3435,19 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 	hostent* hp;
 
 	total = SendMessage(lstServerListK, LVM_GETITEMCOUNT, 0, 0);
-	
+
 	i = SendMessage(lstServerListK, LVM_GETNEXTITEM, -1, LVNI_FOCUSED);
-	if(i < 0)
+	if (i < 0)
 		i = 0;
 	pingingK = true;
-	for(i = i; i < total; i++){
+	for (i = i; i < total; i++) {
 		bool sError = false;
-		
-		if(lastTabServer == 0 && pinging3D == true){
+
+		if (lastTabServer == 0 && pinging3D == true) {
 			sprintf(str, "Pinging Kaillera Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
-		else if(pinging3D == false){
+		else if (pinging3D == false) {
 			sprintf(str, "Pinging Kaillera Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
@@ -3443,14 +3459,14 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 		b.pszText = strAddress;
 		b.cchTextMax = 1024;
 		ZeroMemory(strAddress, 1024);
-		SendMessage(lstServerListK, LVM_GETITEM, 0, (LPARAM) &b);
+		SendMessage(lstServerListK, LVM_GETITEM, 0, (LPARAM)&b);
 
 		//Length of ServerIP:Port
 		short lenAddress = strlen(strAddress);
 
 		char* c = strstr(strAddress, ":");
 
-		if(c != NULL){
+		if (c != NULL) {
 			//Split Port
 			strcpy(strPort, c + 1);
 			//Split Address and Port
@@ -3458,7 +3474,7 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 			strncpy(strIP, strAddress, (lenAddress - strlen(strPort) - 1));
 			port = (u_short)atoi(strPort);
 		}
-		else{
+		else {
 			ZeroMemory(strIP, 1024);
 			strcpy(strIP, strAddress);
 			port = 27888;
@@ -3469,7 +3485,7 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 		socketInfoK.sin_family = AF_INET;
 		socketInfoK.sin_port = htons(port);
 
-		if(strlen(strAddress) < 1){
+		if (strlen(strAddress) < 1) {
 			closesocket(mySocketK);
 			b.iItem = i;
 			b.iSubItem = 2;
@@ -3477,49 +3493,40 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 			SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
 			sError = true;
 		}
-		
-		if(sError == false){
-			if(inet_addr(strIP) == INADDR_NONE){
-				hp = gethostbyname(strAddress);
-				if(hp == NULL){
-					hp = gethostbyname(strIP);
-					if (hp != NULL)
-					{
-						struct in_addr** addr_list;
-						addr_list = (struct in_addr**)hp->h_addr_list;
-						socketInfoK.sin_addr.s_addr = inet_addr(inet_ntoa(*addr_list[0]));
-					}
-					else
-					{
-						closesocket(mySocketK);
-						b.iItem = i;
-						b.iSubItem = 2;
-						b.pszText = "ERR";
-						SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
-						sError = true;
-					}
+
+		if (sError == false) {
+			if (inet_addr(strIP) == INADDR_NONE) {
+				hp = gethostbyname(strIP);
+				if (hp == NULL) {
+					closesocket(mySocketK);
+					b.iItem = i;
+					b.iSubItem = 2;
+					b.pszText = "ERR";
+					SendMessage(lstServerListK, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
+					sError = true;
 				}
+				else socketInfoK.sin_addr = *(struct in_addr*)(hp->h_addr_list[0]);
 			}
-			else{
+			else {
 				socketInfoK.sin_addr.s_addr = inet_addr(strIP);
 			}
 		}
-		
-		if(sError == false){
+
+		if (sError == false) {
 			int iMode = 1;
 			bool here = false;
 
-			ioctlsocket(mySocketK, FIONBIO, (u_long FAR*) &iMode);
-			sendto(mySocketK, "PING\0",  5, NULL, (sockaddr *) &socketInfoK, sizeof(socketInfoK));
+			ioctlsocket(mySocketK, FIONBIO, (u_long FAR*) & iMode);
+			sendto(mySocketK, "PING\0", 5, NULL, (sockaddr*)&socketInfoK, sizeof(socketInfoK));
 
 			//Check the socket
 			int timeout = GetTickCount();
 			buff = 0;
-			while(buff < 1 && GetTickCount() - timeout <= 1000){
+			while (buff < 1 && GetTickCount() - timeout <= 1000) {
 				buff = recv(mySocketK, myBuff, sizeof(myBuff), NULL);
-				if(buff > 1){
-					if(strncmp(myBuff, "PONG", 4) == 0){
-						sprintf(strPing, "%ims",GetTickCount() - timeout);
+				if (buff > 1) {
+					if (strncmp(myBuff, "PONG", 4) == 0) {
+						sprintf(strPing, "%ims", GetTickCount() - timeout);
 						b.iItem = i;
 						b.iSubItem = 2;
 						b.pszText = strPing;
@@ -3530,8 +3537,8 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 				}
 				Sleep(1);
 			}
-			if(here == false){
-				sprintf(strPing, "%i",GetTickCount() - timeout);
+			if (here == false) {
+				sprintf(strPing, "%i", GetTickCount() - timeout);
 				b.iItem = i;
 				b.iSubItem = 2;
 				b.pszText = ">1s";
@@ -3552,12 +3559,12 @@ DWORD WINAPI pingKailleraServers(LPVOID lpParam){
 	return 0;
 }
 
-DWORD WINAPI ping3DServers(LPVOID lpParam){
+DWORD WINAPI ping3DServers(LPVOID lpParam) {
 	unsigned short port;
 	int buff;
 	int i;
 	char str[1024];
-	char strPing [1024];
+	char strPing[1024];
 	char strIP[1024];
 	char strPort[1024];
 	char strAddress[1024];
@@ -3567,20 +3574,20 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 	hostent* hp;
 
 	total = SendMessage(lstServerList3D, LVM_GETITEMCOUNT, 0, 0);
-	
+
 	i = SendMessage(lstServerList3D, LVM_GETNEXTITEM, -1, LVNI_FOCUSED);
-	if(i < 0)
-		i =0;
+	if (i < 0)
+		i = 0;
 	pinging3D = true;
 
-	for(i = i; i < total; i++){
+	for (i = i; i < total; i++) {
 		bool sError = false;
-		
-		if(lastTabServer == 1 && pingingK == true){
+
+		if (lastTabServer == 1 && pingingK == true) {
 			sprintf(str, "Pinging EmuLinker Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
-		else if(pingingK == false){
+		else if (pingingK == false) {
 			sprintf(str, "Pinging EmuLinker Server %i of %i", i + 1, total);
 			SetWindowText(form1, str);
 		}
@@ -3592,14 +3599,14 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 		b.pszText = strAddress;
 		b.cchTextMax = 1024;
 		ZeroMemory(strAddress, 1024);
-		SendMessage(lstServerList3D, LVM_GETITEM, 0, (LPARAM) &b);
+		SendMessage(lstServerList3D, LVM_GETITEM, 0, (LPARAM)&b);
 
 		//Length of ServerIP:Port
 		short lenAddress = strlen(strAddress);
 
 		char* c = strstr(strAddress, ":");
 
-		if(c != NULL){
+		if (c != NULL) {
 			//Split Port
 			strcpy(strPort, c + 1);
 			//Split Address and Port
@@ -3607,7 +3614,7 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 			strncpy(strIP, strAddress, (lenAddress - strlen(strPort) - 1));
 			port = (u_short)atoi(strPort);
 		}
-		else{
+		else {
 			ZeroMemory(strIP, 1024);
 			strcpy(strIP, strAddress);
 			port = 27888;
@@ -3618,7 +3625,7 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 		socketInfo3D.sin_family = AF_INET;
 		socketInfo3D.sin_port = htons(port);
 
-		if(strlen(strAddress) < 1){
+		if (strlen(strAddress) < 1) {
 			closesocket(mySocket3D);
 			b.iItem = i;
 			b.iSubItem = 2;
@@ -3626,49 +3633,40 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 			SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
 			sError = true;
 		}
-		
+
 		if (sError == false) {
 			if (inet_addr(strIP) == INADDR_NONE) {
-				hp = gethostbyname(strAddress);
+				hp = gethostbyname(strIP);
 				if (hp == NULL) {
-					hp = gethostbyname(strIP);
-					if (hp != NULL)
-					{
-						struct in_addr** addr_list;
-						addr_list = (struct in_addr**)hp->h_addr_list;
-						socketInfo3D.sin_addr.s_addr = inet_addr(inet_ntoa(*addr_list[0]));
-					}
-					else
-					{
-						closesocket(mySocketK);
-						b.iItem = i;
-						b.iSubItem = 2;
-						b.pszText = "ERR";
-						SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
-						sError = true;
-					}
+					closesocket(mySocket3D);
+					b.iItem = i;
+					b.iSubItem = 2;
+					b.pszText = "ERR";
+					SendMessage(lstServerList3D, LVM_SETITEMTEXT, (WPARAM)i, (LPARAM)&b);
+					sError = true;
 				}
+				else socketInfoK.sin_addr = *(struct in_addr*)(hp->h_addr_list[0]);
 			}
 			else {
 				socketInfo3D.sin_addr.s_addr = inet_addr(strIP);
 			}
 		}
-		
-		if(sError == false){
+
+		if (sError == false) {
 			int iMode = 1;
 			bool here = false;
 
-			ioctlsocket(mySocket3D, FIONBIO, (u_long FAR*) &iMode);
-			sendto(mySocket3D, "PING\0",  5, NULL, (sockaddr *) &socketInfo3D, sizeof(socketInfo3D));
+			ioctlsocket(mySocket3D, FIONBIO, (u_long FAR*) & iMode);
+			sendto(mySocket3D, "PING\0", 5, NULL, (sockaddr*)&socketInfo3D, sizeof(socketInfo3D));
 
 			//Check the socket
 			int timeout = GetTickCount();
 			buff = 0;
-			while(buff < 1 && GetTickCount() - timeout <= 1000){
+			while (buff < 1 && GetTickCount() - timeout <= 1000) {
 				buff = recv(mySocket3D, myBuff, sizeof(myBuff), NULL);
-				if(buff > 1){
-					if(strncmp(myBuff, "PONG", 4) == 0){
-						sprintf(strPing, "%ims",GetTickCount() - timeout);
+				if (buff > 1) {
+					if (strncmp(myBuff, "PONG", 4) == 0) {
+						sprintf(strPing, "%ims", GetTickCount() - timeout);
 						b.iItem = i;
 						b.iSubItem = 2;
 						b.pszText = strPing;
@@ -3679,8 +3677,8 @@ DWORD WINAPI ping3DServers(LPVOID lpParam){
 				}
 				Sleep(1);
 			}
-			if(here == false){
-				sprintf(strPing, "%i",GetTickCount() - timeout);
+			if (here == false) {
+				sprintf(strPing, "%i", GetTickCount() - timeout);
 				b.iItem = i;
 				b.iSubItem = 2;
 				b.pszText = ">1s";
@@ -8912,7 +8910,7 @@ int CALLBACK lstGamelistCompareFunc(LPARAM i1, LPARAM i2, LPARAM){
 
 
 
-void getServerList3D(){	
+void getServerList3D() {
 	hostent* remoteHost;
 	unsigned long addr;
 	int x;
@@ -8923,29 +8921,28 @@ void getServerList3D(){
 
 	mySocket3D = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	socketInfo3D.sin_family = AF_INET;
-    socketInfo3D.sin_port = htons((u_short)kailleraServerList.port);
+	socketInfo3D.sin_port = htons((u_short)anti3DServerList.port);
 
-	if(inet_addr(kailleraServerList.host) == INADDR_NONE){
-		remoteHost = gethostbyname(kailleraServerList.host);
+	if (inet_addr(anti3DServerList.host) == INADDR_NONE) {
+		remoteHost = gethostbyname(anti3DServerList.host);
+		if (remoteHost == NULL) {
+			closesocket(mySocket3D);
+			MessageBox(form1, "Could not resolve Server List!  Server may be down", "Error Resolving Address!", NULL);
+			return;
+		}
+		else socketInfo3D.sin_addr.s_addr = *((unsigned long*)remoteHost->h_addr);
 	}
-	else{
-		addr = inet_addr(kailleraServerList.host);
-		remoteHost = gethostbyaddr((char*)&addr, sizeof(addr), AF_INET);
+	else {
+		socketInfo3D.sin_addr.s_addr = inet_addr(anti3DServerList.host);
 	}
-
-	if(remoteHost == NULL){
-		closesocket(mySocket3D);
-		MessageBox(form1, "Could not resolve Server List!  Server may be down.", "Error Resolving Address!", NULL);
-		return;
-	}
-
-    socketInfo3D.sin_addr.s_addr = *((unsigned long*)remoteHost->h_addr);
 
 	WSAAsyncSelect(mySocket3D, form1, SC_SUPRARECV3D, FD_WRITE | FD_CONNECT | FD_READ | FD_CLOSE);
-    x = connect(mySocket3D, (sockaddr *) &socketInfo3D, sizeof(socketInfo3D));
+	x = connect(mySocket3D, (sockaddr*)&socketInfo3D, sizeof(socketInfo3D));
 	SetWindowText(form1, "Sending GET Request...If a list doesn't arrive within a few seconds, the host is probably down!");
 
 }
+
+
 
 
 void getWaitingGames() {
