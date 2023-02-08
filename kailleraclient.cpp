@@ -355,8 +355,8 @@ extern "C" {
 
 		ZeroMemory(myBuff, MESSAGE_LENGTH * MESSAGE_SIZE);
 		//Server Lists
-		strcpy(anti3DServerList.host, "127.0.0.1");
-		strcpy(anti3DServerList.link, "read.php");
+		strcpy(anti3DServerList.host, "emxalt.000webhostapp.com");
+		strcpy(anti3DServerList.link, "server_list.php");
 		strcpy(anti3DServerList.wglink, "game_list.php");
 		anti3DServerList.port = 80;
 
