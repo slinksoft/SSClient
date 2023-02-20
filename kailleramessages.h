@@ -521,7 +521,7 @@ unsigned long myPing;
 //################
 char myVersion[12] = "SSC v3.3.4\0";
 char cVersion[35] = "Slink Client X v3.3.4 - Final\0";
-char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.3.4 Final Version - Feburary 19, 2023\r\n\nSpecial Thanks to: OGenDroX, LeafChicken, Jgunishka, Trac, Moosehead, & r@z\r\n\nTesters: OGenDroX, gav (Nova), LeafChicken, Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser : Base client and all his amazing work\nSlink : Maintaining Emulinker X, enhancing Supra Client to Slink Client, adding additional features, optimizing performance and enhancing security\r\n\r\nVisit http://EmxKaillera.net/index.html for more information.\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
+char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.3.4 Final Version - Feburary 19, 2023\r\n\nSpecial Thanks to: OGenDroX, LeafChicken, Jgunishka, Trac, Moosehead, & r@z\r\n\nTesters: OGenDroX, gav (Nova), LeafChicken, Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser : Base client and all his amazing work\nSlink : Maintaining Emulinker X, enhancing Supra Client to Slink Client, adding additional features, optimizing performance and enhancing security\r\n\r\nVisit https://EmxKaillera.net/index.html for more information.\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
 char quit[1024] = "SupraSlinkClient X v3.3.4 Final (Slink's Enhanced Features & Advanced Security) - Feburary 7, 2023\0";
 //################
 bool chatroom;
