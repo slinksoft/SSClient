@@ -355,7 +355,7 @@ extern "C" {
 
 		ZeroMemory(myBuff, MESSAGE_LENGTH * MESSAGE_SIZE);
 		//Server Lists
-		strcpy(anti3DServerList.host, "emxalt.000webhostapp.com");
+		strcpy(anti3DServerList.host, "emxkaillera.net");
 		strcpy(anti3DServerList.link, "server_list.php");
 		strcpy(anti3DServerList.wglink, "game_list.php");
 		anti3DServerList.port = 80;
@@ -804,7 +804,7 @@ extern "C" {
 
 		Serverlist3DAdditem("Right Click to get EmuLinker Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
 		kServerlistAdditem("Right Click to get Kaillera Server List.", NULL, NULL, NULL, NULL, NULL, NULL);
-		waitinglistAdditem("Right Click to get ESF & EMX Waiting Games List.", NULL, NULL, NULL, NULL, NULL, NULL);
+		waitinglistAdditem("Right Click to get EMX Waiting Games List.", NULL, NULL, NULL, NULL, NULL, NULL);
 
 		//Adjust Parent Window
 		EnableWindow(parent, FALSE);
