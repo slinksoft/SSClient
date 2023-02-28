@@ -9,6 +9,7 @@
 #include <richedit.h>
 #include <time.h>
 #include "kailleramessages.h"
+#include <sstream>
 
 using namespace std;
 kailleraInfos kInfo;
@@ -947,6 +948,18 @@ extern "C" {
 
 };
 
+void COLORREF2string(COLORREF cr, char* buffer) {
+	itoa(GetRValue(cr), buffer, 10);
+
+	buffer += strlen(buffer);
+	*buffer = ' ';
+	itoa(GetGValue(cr), buffer + 1, 10);
+
+	buffer += strlen(buffer);
+	*buffer = ' ';
+	itoa(GetBValue(cr), buffer + 1, 10);
+}
+
 
 //maxPing Subclass
 long CALLBACK SubProcTxtMaxPing(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam){
@@ -1704,6 +1717,125 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 							showChatroom(false);
 						else
 							showChatroom(true);
+					}
+
+					else if (hwndCtl == btnSlinkOGThme) {
+					
+						// All Objects required to theme slink client
+						int aElements[7] = { COLOR_WINDOW, COLOR_BTNTEXT, COLOR_WINDOWTEXT, COLOR_BTNFACE, COLOR_HIGHLIGHT, COLOR_HIGHLIGHTTEXT, COLOR_MENU };
+
+						DWORD aColor[7];
+
+						aColor[0] = RGB(0, 0, 0); // COLOR_WINDOW
+						aColor[1] = RGB(0, 255, 0); // COLOR_BTNTEXT
+						aColor[2] = RGB(0, 255, 0); // COLOR_WINDOWTEXT
+						aColor[3] = RGB(0, 0, 0); // COLOR_BTNFACE
+						aColor[4] = RGB(255, 255, 255); //COLOR_HIGHLIGHT
+						aColor[5] = RGB(0, 0, 0); // COLOR_HIGHLIGHTTEXT
+						aColor[6] = RGB(0, 0, 0); // COLOR_MENU
+
+						SetSysColors(7, aElements, aColor);
+					
+					}
+
+					else if (hwndCtl == btnOGenThme) {
+					
+						// All Objects required to theme slink client
+						int aElements[7] = { COLOR_WINDOW, COLOR_BTNTEXT, COLOR_WINDOWTEXT, COLOR_BTNFACE, COLOR_HIGHLIGHT, COLOR_HIGHLIGHTTEXT, COLOR_MENU };
+
+						DWORD aColor[7];
+
+						aColor[0] = RGB(0, 0, 0); // COLOR_WINDOW
+						aColor[1] = RGB(0, 255, 255); // COLOR_BTNTEXT
+						aColor[2] = RGB(0, 255, 255); // COLOR_WINDOWTEXT
+						aColor[3] = RGB(0, 0, 0); // COLOR_BTNFACE
+						aColor[4] = RGB(255, 255, 255); //COLOR_HIGHLIGHT
+						aColor[5] = RGB(0, 0, 0); // COLOR_HIGHLIGHTTEXT
+						aColor[6] = RGB(0, 0, 0); // COLOR_MENU
+
+						SetSysColors(7, aElements, aColor);
+					
+					}
+
+					else if (hwndCtl == btnRedXThme) {
+
+					// All Objects required to theme slink client
+					int aElements[7] = { COLOR_WINDOW, COLOR_BTNTEXT, COLOR_WINDOWTEXT, COLOR_BTNFACE, COLOR_HIGHLIGHT, COLOR_HIGHLIGHTTEXT, COLOR_MENU };
+
+					DWORD aColor[7];
+
+					aColor[0] = RGB(0, 0, 0); // COLOR_WINDOW
+					aColor[1] = RGB(255, 0, 0); // COLOR_BTNTEXT
+					aColor[2] = RGB(255, 0, 0); // COLOR_WINDOWTEXT
+					aColor[3] = RGB(0, 0, 0); // COLOR_BTNFACE
+					aColor[4] = RGB(255, 255, 255); //COLOR_HIGHLIGHT
+					aColor[5] = RGB(0, 0, 0); // COLOR_HIGHLIGHTTEXT
+					aColor[6] = RGB(0, 0, 0); // COLOR_MENU
+
+					SetSysColors(7, aElements, aColor);
+
+					}
+
+					else if (hwndCtl == btnPurpleRainThme) {
+
+					// All Objects required to theme slink client
+					int aElements[7] = { COLOR_WINDOW, COLOR_BTNTEXT, COLOR_WINDOWTEXT, COLOR_BTNFACE, COLOR_HIGHLIGHT, COLOR_HIGHLIGHTTEXT, COLOR_MENU };
+
+					DWORD aColor[7];
+
+					aColor[0] = RGB(0, 0, 0); // COLOR_WINDOW
+					aColor[1] = RGB(127, 0, 255); // COLOR_BTNTEXT
+					aColor[2] = RGB(127, 0, 255); // COLOR_WINDOWTEXT
+					aColor[3] = RGB(0, 0, 0); // COLOR_BTNFACE
+					aColor[4] = RGB(255, 255, 255); //COLOR_HIGHLIGHT
+					aColor[5] = RGB(0, 0, 0); // COLOR_HIGHLIGHTTEXT
+					aColor[6] = RGB(0, 0, 0); // COLOR_MENU
+
+					SetSysColors(7, aElements, aColor);
+
+					}
+
+					else if (hwndCtl == btnSDThme){
+					
+					
+						// All Objects required to theme slink client
+						int aElements[7] = { COLOR_WINDOW, COLOR_BTNTEXT, COLOR_WINDOWTEXT, COLOR_BTNFACE, COLOR_HIGHLIGHT, COLOR_HIGHLIGHTTEXT, COLOR_MENU };
+
+						DWORD aColor[7];
+
+						aColor[0] = RGB(255, 255, 255); // COLOR_WINDOW
+						aColor[1] = RGB(0, 0, 0); // COLOR_BTNTEXT
+						aColor[2] = RGB(0, 0, 0); // COLOR_WINDOWTEXT
+						aColor[3] = RGB(240, 240, 240); // COLOR_BTNFACE
+						aColor[4] = RGB(0, 120, 215); //COLOR_HIGHLIGHT
+						aColor[5] = RGB(255, 255, 255); // COLOR_HIGHLIGHTTEXT
+						aColor[6] = RGB(240, 240, 240); // COLOR_MENU
+
+						SetSysColors(7, aElements, aColor);
+						
+
+						/* // DO NOT REMOVE!!! FOR DEBUG PURPOSES ONLY when needed
+						DWORD theColors[7];
+						int aElements[7] = { COLOR_WINDOW, COLOR_BTNTEXT, COLOR_WINDOWTEXT, COLOR_BTNFACE, COLOR_HIGHLIGHT, COLOR_HIGHLIGHTTEXT, COLOR_MENU };
+
+						stringstream output;
+
+						for (int i = 0; i < (sizeof(aElements) / sizeof(int)); i++)
+						{
+							theColors[i] = GetSysColor(aElements[i]);
+						
+							char buf[16];
+							COLORREF2string(theColors[i], buf);
+							output << "element #" << (i + 1) << " : " << buf << endl;
+						}
+					
+						string theOutput = output.str();
+						MessageBox(form1, theOutput.c_str(), "output", NULL);
+
+						*/
+					}
+					else if (hwndCtl == btnHelpThme) {
+						MessageBox(form1, themeHelp, "Help With Themes", NULL);
 					}
 					else if(hwndCtl == btnGameKick && imOwner)
 						kickRequest();
@@ -2512,8 +2644,8 @@ void createInitialWindow(){
 	TabCtrl_InsertItem(tTab, 2, &v);
 	v.pszText = "Extended Emulinker X v3.1.3+ Gameroom Options";
 	TabCtrl_InsertItem(tTab, 3, &v);
-	//v.pszText = "P2P Options";
-	//TabCtrl_InsertItem(tTab, 4, &v);
+	v.pszText = "Slink's X Themes";
+	TabCtrl_InsertItem(tTab, 4, &v);
 	//Login Servers
 	sTab = CreateWindowEx(controlStyles, "SysTabControl32", NULL, tabProperties, 5, 5, 780, 470, form1, NULL, hInstance, NULL);
 	SendMessage(sTab, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
@@ -2568,7 +2700,24 @@ void createInitialWindow(){
 	//Custom Game
 	btnHG = CreateWindowEx(controlStyles, "BUTTON", "Host Custom", buttonProperties, 410, 530, 70, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnHG, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
-
+	//Slink's OG Theme
+	btnSlinkOGThme = CreateWindowEx(controlStyles, "BUTTON", "Slink's OG Theme", buttonProperties, 23, 510, 110, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnSlinkOGThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//OGen's Theme
+	btnOGenThme = CreateWindowEx(controlStyles, "BUTTON", "OGenDroX's Theme", buttonProperties, 23, 535, 110, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnOGenThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Red X Theme
+	btnRedXThme = CreateWindowEx(controlStyles, "BUTTON", "Red X", buttonProperties, 143, 510, 110, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnRedXThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Purple Rain Theme
+	btnPurpleRainThme = CreateWindowEx(controlStyles, "BUTTON", "Purple Rain", buttonProperties, 143, 535, 110, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnPurpleRainThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Revert To System Default Theme
+	btnSDThme = CreateWindowEx(controlStyles, "BUTTON", "System Default Theme", buttonProperties, 355, 510, 130, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnSDThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	//Theme Help
+	btnHelpThme = CreateWindowEx(controlStyles, "BUTTON", "Help With Themes", buttonProperties, 355, 535, 130, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnHelpThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 
 	//P2P
 	/*txtP2PServer = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", p2pServer, textboxProperties, 10, 520, 210,25, form1, NULL, hInstance, NULL);
@@ -3796,7 +3945,7 @@ void createChatroom(){
 	//Create Form
 	//Create Server List Frame
 	//Create Main Chatroom
-	txtChatroom = CreateWindowEx(WS_EX_CLIENTEDGE, "RichEdit", NULL, richTextboxProperties, 5, 5, 480, 260, form1, NULL, hInstance, NULL);
+	txtChatroom = CreateWindowEx(WS_EX_CLIENTEDGE, "RichEdit20W", NULL, richTextboxProperties, 5, 5, 480, 260, form1, NULL, hInstance, NULL);
 	SendMessage(txtChatroom, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(txtChatroom, EM_SHOWSCROLLBAR, SB_VERT, true);
 	SendMessage(txtChatroom, EM_SETREADONLY, true, 0);
@@ -3805,7 +3954,7 @@ void createChatroom(){
 	SendMessage(txtChatroom, EM_AUTOURLDETECT, (WPARAM)true, 0);//URL detect
 
 	//Create Game Chatroom
-	txtGameChatroom = CreateWindowEx(WS_EX_CLIENTEDGE, "RichEdit", "<New Session>\r\n", richTextboxProperties, 5, 330, 480, 115, form1, NULL, hInstance, NULL);
+	txtGameChatroom = CreateWindowEx(WS_EX_CLIENTEDGE, "RichEdit20W", "<New Session>\r\n", richTextboxProperties, 5, 330, 480, 115, form1, NULL, hInstance, NULL);
 	SendMessage(txtGameChatroom, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	SendMessage(txtGameChatroom, EM_SHOWSCROLLBAR, SB_VERT, true);
 	SendMessage(txtGameChatroom, EM_SETREADONLY, true, 0);
@@ -7083,7 +7232,7 @@ void globalChatNotification(unsigned short position, int slot){
 	strcat(temp,"\r\n");
 	
 	//Display
-	displayAndAutoScrollRichEdit(txtChatroom, temp, RGB(0, 0, 0));
+	displayAndAutoScrollRichEdit(txtChatroom, temp, GetSysColor(COLOR_WINDOWTEXT));
 
 	//Log
 	saveChatroomLog(temp);
@@ -7134,6 +7283,12 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(btnSlinkOGThme, SW_HIDE);
+		ShowWindow(btnOGenThme, SW_HIDE);
+		ShowWindow(btnRedXThme, SW_HIDE);
+		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnSDThme, SW_HIDE);
+		ShowWindow(btnHelpThme, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7185,6 +7340,12 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(btnSlinkOGThme, SW_HIDE);
+		ShowWindow(btnOGenThme, SW_HIDE);
+		ShowWindow(btnRedXThme, SW_HIDE);
+		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnSDThme, SW_HIDE);
+		ShowWindow(btnHelpThme, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7236,6 +7397,12 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(btnSlinkOGThme, SW_HIDE);
+		ShowWindow(btnOGenThme, SW_HIDE);
+		ShowWindow(btnRedXThme, SW_HIDE);
+		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnSDThme, SW_HIDE);
+		ShowWindow(btnHelpThme, SW_HIDE);
 
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
@@ -7288,6 +7455,13 @@ void showOptions(char show){
 		ShowWindow(btnAC, SW_SHOW);
 		ShowWindow(btnHG, SW_SHOW);
 
+		ShowWindow(btnSlinkOGThme, SW_HIDE);
+		ShowWindow(btnOGenThme, SW_HIDE);
+		ShowWindow(btnRedXThme, SW_HIDE);
+		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnSDThme, SW_HIDE);
+		ShowWindow(btnHelpThme, SW_HIDE);
+
 		/*ShowWindow(lblP2PServer, SW_HIDE);
 		ShowWindow(txtP2PServer, SW_HIDE);
 		ShowWindow(lblP2PPort, SW_HIDE);
@@ -7296,12 +7470,17 @@ void showOptions(char show){
 		ShowWindow(btnP2PServer, SW_HIDE);
 		ShowWindow(btnP2PConnect, SW_HIDE);*/
 	}
-	//P2P Options
-	/*else if(show == 4){
+	//Theme Options
+	else if(show == 4){
+		ShowWindow(lblServerIP, SW_HIDE);
 		ShowWindow(txtServerIP, SW_HIDE);
 		ShowWindow(txtUsername, SW_HIDE);
+		ShowWindow(lblUsername, SW_HIDE);
 		ShowWindow(txtPing, SW_HIDE);
+		ShowWindow(lblPing, SW_HIDE);
+		ShowWindow(lblQuit, SW_HIDE);
 		ShowWindow(txtQuit, SW_HIDE);
+		ShowWindow(lblConnectionType, SW_HIDE);
 		ShowWindow(cmbConnectionType, SW_HIDE);
 		ShowWindow(chkShowError, SW_HIDE);
 		ShowWindow(chkDrop, SW_HIDE);
@@ -7312,8 +7491,8 @@ void showOptions(char show){
 		ShowWindow(chkBlink, SW_HIDE);
 
 		//ShowWindow(lblStats, SW_HIDE);
-		ShowWindow(btnLogoff, SW_HIDE);
-		ShowWindow(btnLogin, SW_HIDE);
+		ShowWindow(btnLogoff, SW_SHOW);
+		ShowWindow(btnLogin, SW_SHOW);
 
 		ShowWindow(chkBeep, SW_HIDE);
 		ShowWindow(chkJoinChatGame, SW_HIDE);
@@ -7334,14 +7513,13 @@ void showOptions(char show){
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
 
-		ShowWindow(lblP2PServer, SW_SHOW);
-		ShowWindow(txtP2PServer, SW_SHOW);
-		ShowWindow(lblP2PPort, SW_SHOW);
-		ShowWindow(txtP2PPort, SW_SHOW);
-		ShowWindow(btnP2PStart, SW_SHOW);
-		ShowWindow(btnP2PServer, SW_SHOW);
-		ShowWindow(btnP2PConnect, SW_SHOW);
-	}*/
+		ShowWindow(btnSlinkOGThme, SW_SHOW);
+		ShowWindow(btnOGenThme, SW_SHOW);
+		ShowWindow(btnRedXThme, SW_SHOW);
+		ShowWindow(btnPurpleRainThme, SW_SHOW);
+		ShowWindow(btnSDThme, SW_SHOW);
+		ShowWindow(btnHelpThme, SW_SHOW);
+	}
 
 }
 
@@ -7569,7 +7747,7 @@ void gameChatNotification(unsigned short position, int slot){
 		strcat(temp, "\r\n");
 
 		//Display
-		displayAndAutoScrollRichEdit(txtGameChatroom, temp, RGB(0, 0, 0));
+		displayAndAutoScrollRichEdit(txtGameChatroom, temp, GetSysColor(COLOR_WINDOWTEXT));
 
 		//Log
 		saveGameroomLog(temp);
@@ -8597,6 +8775,7 @@ void serverInformationMessage(unsigned short position, int slot){
 		}
 		if (strncmp(message, ":ALIVECHECK=", 8) == 0) {
 			MessageBox(form1, &message[12], "Slink Client Alive Check", NULL);
+
 			//Log
 			saveChatroomLog(temp);
 		}

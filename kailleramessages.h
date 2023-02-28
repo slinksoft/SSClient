@@ -189,6 +189,12 @@ HWND chkJoinChatGame;
 HWND btnVersion;
 HWND btnAC;
 HWND btnHG;
+HWND btnSlinkOGThme;
+HWND btnOGenThme;
+HWND btnRedXThme;
+HWND btnPurpleRainThme;
+HWND btnSDThme;
+HWND btnHelpThme;
 //HWND txtP2PServer;
 //HWND lblP2PServer;
 //char p2pServer[1024];
@@ -519,11 +525,11 @@ char emulator[128];
 char serverIP[1024] = "127.0.0.1:27888\0";
 unsigned long myPing;
 //################
-char myVersion[12] = "SSC v3.3.4\0";
-char cVersion[35] = "Slink Client X v3.3.4 - Final\0";
-char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.3.4 Final Version - Feburary 19, 2023\r\n\nSpecial Thanks to: OGenDroX, LeafChicken, Jgunishka, Trac, Moosehead, & r@z\r\n\nTesters: OGenDroX, gav (Nova), LeafChicken, Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser : Base client and all his amazing work\nSlink : Maintaining Emulinker X, enhancing Supra Client to Slink Client, adding additional features, optimizing performance and enhancing security\r\n\r\nVisit https://EmxKaillera.net/index.html for more information.\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
-char quit[1024] = "SupraSlinkClient X v3.3.4 Final (Slink's Enhanced Features & Advanced Security) - Feburary 7, 2023\0";
-//################
+char myVersion[12] = "SSC v3.6.0\0";
+char cVersion[35] = "Slink Client X v3.6.0 - Final\0";
+char initText[1024] = "SupraSlinkClient [C++ Edition]\r\nVersion: X 3.6.0 Final Version - Feburary 27, 2023\r\n\nSpecial Thanks to: OGenDroX, LeafChicken, Jgunishka, Trac, Moosehead, & r@z\r\n\nTesters: OGenDroX, gav (Nova), LeafChicken, Morphus56K, Paramount, Agenda Suicide, okaygo\r\n\nAuthor:\nSupraFast - Daniel Strusser : Base client and all his amazing work\nSlink : Maintaining Emulinker X, enhancing Supra Client to Slink Client, adding additional features, optimizing performance and enhancing security\r\n\r\nVisit https://EmxKaillera.net/index.html for more information.\r\n\r\n# To get started, click on the button below that says [Servers] #\n\0";
+char quit[1024] = "SupraSlinkClient X v3.6.0 Final (Slink's Enhanced Features & Advanced Security) - Feburary 27, 2023\0";
+char themeHelp[2048] = "Themes work by temporarily changing your system's default color palette; this is the only way to properly theme legacy WinAPI/Win32 applications without the use of owner-drawn controls. By changing Slink Client's theme, you may experience other color elements throughout your system change.\r\n\r\nRest assured, this is only a temporary change; sleeping, logging off, shutting down, and/or restarting your computer will revert your system's color palette back to default.\r\n\r\nIf you do not want to take the unnecessary step of sleeping/logoff/shutdown/restart your computer, you can simply click the \"System Default Theme\" button. This will revert Slink Client's theme back to the system default color palette, as well as restore your other applications color elements that were affected by this feature. \r\n\r\nNowadays, majority of modern applications do not utilize the system's default color palette, so the effect from this feature should be minimal.\r\n\r\nIMPORTANT NOTE: Restarting Slink Client after changing themes will allow the theme change to take full effect!";
 bool chatroom;
 
 int mainBytesRecv;
