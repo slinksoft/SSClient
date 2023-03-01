@@ -1321,6 +1321,9 @@ long CALLBACK SubProcTxtGameChat(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
 //******************************************************************
 
+int g_nClientWidth;
+int g_nClientHeight;
+
             //This is where all the messages will be processed
 //******************************************************************
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
@@ -1339,6 +1342,54 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 	
 	//----------------------------------------------------------
 	switch(message){
+
+	case WM_SIZE:
+	{
+		// Get the new size of the main window
+		int cx = LOWORD(lParam);
+		int cy = HIWORD(lParam);
+
+		// If the window is minimized, skip resizing and repositioning the child controls
+		if (cx == 0 && cy == 0) {
+			return 0;
+		}
+
+
+		// Loop through all child controls and resize/reposition them
+		HWND hwndChild = GetWindow(hWnd, GW_CHILD);
+		while (hwndChild)
+		{
+			// Get the current position and size of the child control
+			RECT rect;
+			GetWindowRect(hwndChild, &rect);
+			MapWindowPoints(HWND_DESKTOP, hWnd, (LPPOINT)&rect, 2);
+
+			// Calculate the new position and size relative to the new size of the main window
+			int x = rect.left * cx / g_nClientWidth;
+			int y = rect.top * cy / g_nClientHeight;
+
+			int width = rect.right * cx / g_nClientWidth - x;
+			int height = rect.bottom * cy / g_nClientHeight - y;;
+
+			if (hwndChild == cmbConnectionType)
+			{
+				width = 90;
+				height = 500;
+			}
+
+			// Resize/reposition the child control
+			SetWindowPos(hwndChild, NULL, x, y, width, height, SWP_NOZORDER | SWP_NOACTIVATE);
+
+			// Get the next child control
+			hwndChild = GetWindow(hwndChild, GW_HWNDNEXT);
+		}
+
+		// Save the new size of the main window
+		g_nClientWidth = cx;
+		g_nClientHeight = cy;
+
+		return 0;
+	}
 		case WM_COMMAND:{
 			switch(wParam){
 				case BN_CLICKED:{
@@ -1792,6 +1843,72 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 					aColor[6] = RGB(0, 0, 0); // COLOR_MENU
 
 					SetSysColors(7, aElements, aColor);
+
+					}
+
+					else if (hwndCtl == btnXLSize) {
+
+					HWND hwnd;
+
+					/* // DO NOT REMOVE!!! FOR DEBUG PURPOSES ONLY when needed
+					RECT windowRect;
+					RECT clientRect;
+
+					GetWindowRect(hwnd, &windowRect);
+					GetClientRect(hwnd, &clientRect);
+
+					int windowHeight = windowRect.bottom - windowRect.top;
+					int clientHeight = clientRect.bottom - clientRect.top;
+					int borderHeight = windowHeight - clientHeight;
+					int windowWidth = windowRect.right - windowRect.left;
+					int clientWidth = clientRect.right - clientRect.left;
+					int borderWidth = windowWidth - clientWidth;
+
+					int height = windowHeight - borderHeight;
+					int width = windowWidth - borderWidth;
+					
+					
+					stringstream resultsSS;
+					resultsSS << "Width: " << to_string(width) << ", Height: " << to_string(height);
+					string results = resultsSS.str();
+
+					MessageBox(form1, results.c_str(), "Results", NULL);
+					*/
+
+					SetWindowPos(hwnd, NULL, xPos, yPos, 1290, 973, NULL);
+
+					}
+
+					else if (hwndCtl == btnOGSize) {
+
+					HWND hwnd;
+					
+					/* // DO NOT REMOVE!!! FOR DEBUG PURPOSES ONLY when needed
+					RECT windowRect;
+					RECT clientRect;
+
+					GetWindowRect(hwnd, &windowRect);
+					GetClientRect(hwnd, &clientRect);
+
+					int windowHeight = windowRect.bottom - windowRect.top;
+					int clientHeight = clientRect.bottom - clientRect.top;
+					int borderHeight = windowHeight - clientHeight;
+					int windowWidth = windowRect.right - windowRect.left;
+					int clientWidth = clientRect.right - clientRect.left;
+					int borderWidth = windowWidth - clientWidth;
+
+					int height = windowHeight - borderHeight;
+					int width = windowWidth - borderWidth;
+
+					
+					stringstream resultsSS;
+					resultsSS << "Width: " << to_string(width) << ", Height: " << to_string(height);
+					string results = resultsSS.str();
+
+					MessageBox(form1, results.c_str(), "Results", NULL);
+					*/
+
+					SetWindowPos(hwnd, NULL, xPos, yPos, 800, 600, NULL);
 
 					}
 
@@ -2707,11 +2824,17 @@ void createInitialWindow(){
 	btnOGenThme = CreateWindowEx(controlStyles, "BUTTON", "OGenDroX's Theme", buttonProperties, 23, 535, 110, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnOGenThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Red X Theme
-	btnRedXThme = CreateWindowEx(controlStyles, "BUTTON", "Red X", buttonProperties, 143, 510, 110, 25, form1, NULL, hInstance, NULL);
+	btnRedXThme = CreateWindowEx(controlStyles, "BUTTON", "Red X", buttonProperties, 137, 510, 110, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnRedXThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Purple Rain Theme
-	btnPurpleRainThme = CreateWindowEx(controlStyles, "BUTTON", "Purple Rain", buttonProperties, 143, 535, 110, 25, form1, NULL, hInstance, NULL);
+	btnPurpleRainThme = CreateWindowEx(controlStyles, "BUTTON", "Purple Rain", buttonProperties, 137, 535, 110, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnPurpleRainThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	// OG Size
+	btnOGSize = CreateWindowEx(controlStyles, "BUTTON", "OG Size", buttonProperties, 251, 510, 100, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnOGSize, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	// XL Size
+	btnXLSize = CreateWindowEx(controlStyles, "BUTTON", "XL Size", buttonProperties, 251, 535, 100, 25, form1, NULL, hInstance, NULL);
+	SendMessage(btnXLSize, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Revert To System Default Theme
 	btnSDThme = CreateWindowEx(controlStyles, "BUTTON", "System Default Theme", buttonProperties, 355, 510, 130, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnSDThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
@@ -2889,7 +3012,7 @@ void popupAway(){
 	RECT b;
 
 	//Get Window Position
-	GetWindowRect(form1, &b);
+	GetWindowRect(btnAway, &b);
 
 
 	//Make List
@@ -2906,7 +3029,7 @@ void popupAway(){
 	}
 
 	//Popup Menu at Appropriate Location
-	i = TrackPopupMenu(awayMenu, TPM_RETURNCMD, b.left + 725, b.top + 330, 0, form1, NULL);
+	i = TrackPopupMenu(awayMenu, TPM_RETURNCMD, b.right, b.top, 0, form1, NULL);
 
 	//Error Check
 	if(i == 0)
@@ -4137,12 +4260,12 @@ void popupMenu(char num){
 	HWND tempS;
 	
 	//Get Window Position
-	GetWindowRect(form1, &b);
+	GetWindowRect(btnCreate, &b);
 
 	//Create Game
 	if(num == 0){
 		//Popup Menu at Appropriate Location
-		i = TrackPopupMenu(gameMenu, TPM_RETURNCMD, b.left + 425, b.top + 300, 0, form1, NULL);
+		i = TrackPopupMenu(gameMenu, TPM_RETURNCMD, b.right, b.top, 0, form1, NULL);
 		
 		if(i == 0xFFFD && strcmp(lastGameToPlay1, "LastGameToPlay1") != 0){
 			strcpy(currentGame, lastGameToPlay1);
@@ -7287,6 +7410,8 @@ void showOptions(char show){
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
 		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnXLSize, SW_HIDE);
+		ShowWindow(btnOGSize, SW_HIDE);
 		ShowWindow(btnSDThme, SW_HIDE);
 		ShowWindow(btnHelpThme, SW_HIDE);
 
@@ -7344,6 +7469,8 @@ void showOptions(char show){
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
 		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnXLSize, SW_HIDE);
+		ShowWindow(btnOGSize, SW_HIDE);
 		ShowWindow(btnSDThme, SW_HIDE);
 		ShowWindow(btnHelpThme, SW_HIDE);
 
@@ -7401,6 +7528,8 @@ void showOptions(char show){
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
 		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnXLSize, SW_HIDE);
+		ShowWindow(btnOGSize, SW_HIDE);
 		ShowWindow(btnSDThme, SW_HIDE);
 		ShowWindow(btnHelpThme, SW_HIDE);
 
@@ -7459,6 +7588,8 @@ void showOptions(char show){
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
 		ShowWindow(btnPurpleRainThme, SW_HIDE);
+		ShowWindow(btnXLSize, SW_HIDE);
+		ShowWindow(btnOGSize, SW_HIDE);
 		ShowWindow(btnSDThme, SW_HIDE);
 		ShowWindow(btnHelpThme, SW_HIDE);
 
@@ -7517,6 +7648,8 @@ void showOptions(char show){
 		ShowWindow(btnOGenThme, SW_SHOW);
 		ShowWindow(btnRedXThme, SW_SHOW);
 		ShowWindow(btnPurpleRainThme, SW_SHOW);
+		ShowWindow(btnXLSize, SW_SHOW);
+		ShowWindow(btnOGSize, SW_SHOW);
 		ShowWindow(btnSDThme, SW_SHOW);
 		ShowWindow(btnHelpThme, SW_SHOW);
 	}
