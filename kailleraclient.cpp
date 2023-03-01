@@ -7688,11 +7688,39 @@ void displayAndAutoScrollRichEdit(HWND rEdit, char *temp, COLORREF rgbColor){
 	SendMessage(rEdit, EM_SETTEXTEX, (WPARAM) &q, (LPARAM) temp);
 	
 	//Height
-	if(rEdit == txtChatroom)
-		f = 260;
-	else
-		f = 115;
+	if (rEdit == txtChatroom)
+	{
+		RECT windowRect;
+		RECT clientRect;
 
+		GetWindowRect(txtChatroom, &windowRect);
+		GetClientRect(txtChatroom, &clientRect);
+
+		int windowHeight = windowRect.bottom - windowRect.top;
+		int clientHeight = clientRect.bottom - clientRect.top;
+		int borderHeight = windowHeight - clientHeight;
+
+		int height = windowHeight - borderHeight;
+
+		f = height;
+
+	}
+	else
+	{
+		RECT windowRect;
+		RECT clientRect;
+
+		GetWindowRect(txtGameChatroom, &windowRect);
+		GetClientRect(txtGameChatroom, &clientRect);
+
+		int windowHeight = windowRect.bottom - windowRect.top;
+		int clientHeight = clientRect.bottom - clientRect.top;
+		int borderHeight = windowHeight - clientHeight;
+
+		int height = windowHeight - borderHeight;
+
+		f = height;
+	}
 	//Auto Scroll
 	if((i + f) >= max)
 		SendMessage(rEdit, WM_VSCROLL, SB_BOTTOM, 0);
