@@ -56,6 +56,7 @@ extern "C" {
 		joinDblValue = 1;
 		EmulinkerXValue = 0;
 		fakeP2PValue = 0;
+		EmuNameValue = 0;
 		//wsprintf(p2pPort, "%i", 7159);
 		//strcpy(p2pServer, "127.0.0.1");
 
@@ -199,6 +200,9 @@ extern "C" {
 				// Ping Spoof
 				else if (strncmp(temp, "SpoofPing=", 10) == 0)
 				strcpy(sPing, &temp[10]); //SpoofPing=
+				// Custom Emulator Name
+				else if (strncmp(temp, "EmulatorName=", 13) == 0)
+				strcpy(cusEmulator, &temp[13]); //EmulatorName=
 				//Nick
 				else if (strncmp(temp, "Nick=", 5) == 0) {
 					strcpy(username, &temp[5]); //Nick=
@@ -379,12 +383,13 @@ extern "C" {
 		short strSize;
 		int w = 0;
 		char temp[2048];
+
 		
 		kInfo = *infosp;
 
 		//Get Emulator Name
 		strcpy(emulator, kInfo.appName);
-		
+				
 		//Get Game List
 		for(i = 0; i < 65536; i++){
 			strSize = strlen((kInfo.gameList) + w);
@@ -1566,6 +1571,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 					else if(hwndCtl == chkKeepGameChatLogs){
 						gameChatLogValue = SendMessage(chkKeepGameChatLogs, BM_GETCHECK, 0, 0);
 					}
+					else if (hwndCtl == chkEmuName) {
+						EmuNameValue = SendMessage(chkEmuName, BM_GETCHECK, 0, 0);
+					}
 					else if(hwndCtl == chkFakeP2P){
 						fakeP2PValue = SendMessage(chkFakeP2P, BM_GETCHECK, 0, 0);
 						if(myGameID != -1 && imOwner == true){
@@ -1985,6 +1993,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
 					showOptions(3);
 				else if(i == 4)
 					showOptions(4);
+				else if (i == 5)
+					showOptions(5);
 				return 0;
 			}
 
@@ -2763,6 +2773,8 @@ void createInitialWindow(){
 	TabCtrl_InsertItem(tTab, 3, &v);
 	v.pszText = "Slink's X Themes";
 	TabCtrl_InsertItem(tTab, 4, &v);
+	v.pszText = "Slink's Extras";
+	TabCtrl_InsertItem(tTab, 5, &v);
 	//Login Servers
 	sTab = CreateWindowEx(controlStyles, "SysTabControl32", NULL, tabProperties, 5, 5, 780, 470, form1, NULL, hInstance, NULL);
 	SendMessage(sTab, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
@@ -2815,8 +2827,17 @@ void createInitialWindow(){
 	btnAC = CreateWindowEx(controlStyles, "BUTTON", "Alive Check", buttonProperties, 410, 505, 70, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnAC, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
 	//Custom Game
-	btnHG = CreateWindowEx(controlStyles, "BUTTON", "Host Custom", buttonProperties, 410, 530, 70, 25, form1, NULL, hInstance, NULL);
+	btnHG = CreateWindowEx(controlStyles, "BUTTON", "Host Custom Game", buttonProperties, 23, 530, 110, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnHG, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	// Custom Emulator Name
+	txtEmuName = CreateWindowEx(WS_EX_CLIENTEDGE, "EDIT", cusEmulator, textboxProperties, 205, 530, 205, 25, form1, NULL, hInstance, NULL);
+	SendMessage(txtEmuName, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	lblEmuName = CreateWindowEx(controlStyles, "STATIC", "Set Custom Emulator Name", labelProperties, 235, 510, 150, 15, form1, NULL, hInstance, NULL);
+	SendMessage(lblEmuName, WM_SETFONT, (WPARAM)hDefaultFontEMU, MAKELPARAM(FALSE, 0));
+	// Enable Emulator Name
+	chkEmuName = CreateWindowEx(controlStyles, "BUTTON", "Enable?", checkProperties, 420, 530, 100, 25, form1, NULL, hInstance, NULL);
+	SendMessage(chkEmuName, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
+	SendMessage(chkEmuName, BM_SETCHECK, EmuNameValue, 0);
 	//Slink's OG Theme
 	btnSlinkOGThme = CreateWindowEx(controlStyles, "BUTTON", "Slink's OG Theme", buttonProperties, 23, 510, 110, 25, form1, NULL, hInstance, NULL);
 	SendMessage(btnSlinkOGThme, WM_SETFONT, (WPARAM)hDefaultFont, MAKELPARAM(FALSE, 0));
@@ -5272,6 +5293,10 @@ int saveConfig(){
 	GetWindowText(txtPing, temp, GetWindowTextLength(txtPing) + 1);
 	config << "SpoofPing=" << temp << "\n";
 
+	//Customer Emulator Name
+	GetWindowText(txtEmuName, temp, GetWindowTextLength(txtEmuName) + 1);
+	config << "EmulatorName=" << temp << "\n";
+
 	//Connection
 	GetWindowText(cmbConnectionType, temp, GetWindowTextLength(cmbConnectionType) + 1);		
 	if(strcmp(temp,"LAN") == 0)
@@ -5684,6 +5709,24 @@ DWORD WINAPI recvLoop(LPVOID lpParam){
 
 				short lenUsername = (short)GetWindowTextLength(txtUsername);
 				short lenSpoofPing = (short)GetWindowTextLength(txtPing);
+				
+				short lenEmuName = (short)GetWindowTextLength(txtEmuName);
+				char custEmulatorName[128];
+				if (EmuNameValue == BST_CHECKED)
+				{
+					GetWindowText(txtEmuName, custEmulatorName, lenEmuName + 1);
+
+					// Check if user input an empty emulator name. if so, use the actual emulator name instead of the custom one.
+					if (strlen(custEmulatorName) == 0)
+						strcpy(emulator, kInfo.appName);
+					else
+						strcpy(emulator, custEmulatorName);
+				}
+				else
+				{
+					strcpy(emulator, kInfo.appName);
+				}
+				
 				short lenEmulator = (short)strlen(emulator);
 				short lenConnectionType = (short)GetWindowTextLength(cmbConnectionType);
 				char temp[16];
@@ -7406,6 +7449,9 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(txtEmuName, SW_HIDE);
+		ShowWindow(lblEmuName, SW_HIDE);
+		ShowWindow(chkEmuName, SW_HIDE);
 		ShowWindow(btnSlinkOGThme, SW_HIDE);
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
@@ -7465,6 +7511,9 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(txtEmuName, SW_HIDE);
+		ShowWindow(lblEmuName, SW_HIDE);
+		ShowWindow(chkEmuName, SW_HIDE);
 		ShowWindow(btnSlinkOGThme, SW_HIDE);
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
@@ -7524,6 +7573,9 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(txtEmuName, SW_HIDE);
+		ShowWindow(lblEmuName, SW_HIDE);
+		ShowWindow(chkEmuName, SW_HIDE);
 		ShowWindow(btnSlinkOGThme, SW_HIDE);
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
@@ -7582,8 +7634,10 @@ void showOptions(char show){
 		ShowWindow(chkConnRes, SW_SHOW);
 		ShowWindow(btnVersion, SW_SHOW);
 		ShowWindow(btnAC, SW_SHOW);
-		ShowWindow(btnHG, SW_SHOW);
-
+		ShowWindow(btnHG, SW_HIDE);
+		ShowWindow(txtEmuName, SW_HIDE);
+		ShowWindow(lblEmuName, SW_HIDE);
+		ShowWindow(chkEmuName, SW_HIDE);
 		ShowWindow(btnSlinkOGThme, SW_HIDE);
 		ShowWindow(btnOGenThme, SW_HIDE);
 		ShowWindow(btnRedXThme, SW_HIDE);
@@ -7643,7 +7697,9 @@ void showOptions(char show){
 		ShowWindow(btnVersion, SW_HIDE);
 		ShowWindow(btnAC, SW_HIDE);
 		ShowWindow(btnHG, SW_HIDE);
-
+		ShowWindow(txtEmuName, SW_HIDE);
+		ShowWindow(lblEmuName, SW_HIDE);
+		ShowWindow(chkEmuName, SW_HIDE);
 		ShowWindow(btnSlinkOGThme, SW_SHOW);
 		ShowWindow(btnOGenThme, SW_SHOW);
 		ShowWindow(btnRedXThme, SW_SHOW);
@@ -7652,6 +7708,62 @@ void showOptions(char show){
 		ShowWindow(btnOGSize, SW_SHOW);
 		ShowWindow(btnSDThme, SW_SHOW);
 		ShowWindow(btnHelpThme, SW_SHOW);
+	}
+	//Extra Options
+	else if (show == 5) {
+	ShowWindow(lblServerIP, SW_HIDE);
+	ShowWindow(txtServerIP, SW_HIDE);
+	ShowWindow(txtUsername, SW_HIDE);
+	ShowWindow(lblUsername, SW_HIDE);
+	ShowWindow(txtPing, SW_HIDE);
+	ShowWindow(lblPing, SW_HIDE);
+	ShowWindow(lblQuit, SW_HIDE);
+	ShowWindow(txtQuit, SW_HIDE);
+	ShowWindow(lblConnectionType, SW_HIDE);
+	ShowWindow(cmbConnectionType, SW_HIDE);
+	ShowWindow(chkShowError, SW_HIDE);
+	ShowWindow(chkDrop, SW_HIDE);
+	ShowWindow(btnChatroom, SW_SHOW);
+	ShowWindow(chkKeepGameChatLogs, SW_HIDE);
+	ShowWindow(chkKeepChatLogs, SW_HIDE);
+	ShowWindow(chkUseCache, SW_HIDE);
+	ShowWindow(chkBlink, SW_HIDE);
+
+	//ShowWindow(lblStats, SW_HIDE);
+	ShowWindow(btnLogoff, SW_SHOW);
+	ShowWindow(btnLogin, SW_SHOW);
+
+	ShowWindow(chkBeep, SW_HIDE);
+	ShowWindow(chkJoinChatGame, SW_HIDE);
+	ShowWindow(chkUseScreenChat, SW_HIDE);
+	ShowWindow(chkJoinChat, SW_HIDE);
+	ShowWindow(chkCreate, SW_HIDE);
+	ShowWindow(chkJoinDbl, SW_HIDE);
+
+	ShowWindow(txtMaxUsers, SW_HIDE);
+	ShowWindow(lblMaxUsers, SW_HIDE);
+	ShowWindow(txtMaxPing, SW_HIDE);
+	ShowWindow(lblMaxPing, SW_HIDE);
+	ShowWindow(chkFakeP2P, SW_HIDE);
+	ShowWindow(chkEmulinkerX, SW_HIDE);
+	ShowWindow(chkEmuRes, SW_HIDE);
+	ShowWindow(chkConnRes, SW_HIDE);
+	ShowWindow(btnVersion, SW_HIDE);
+	ShowWindow(btnAC, SW_HIDE);
+
+	ShowWindow(btnHG, SW_SHOW);
+	ShowWindow(txtEmuName, SW_SHOW);
+	ShowWindow(lblEmuName, SW_SHOW);
+	ShowWindow(chkEmuName, SW_SHOW);
+
+	ShowWindow(btnSlinkOGThme, SW_HIDE);
+	ShowWindow(btnOGenThme, SW_HIDE);
+	ShowWindow(btnRedXThme, SW_HIDE);
+	ShowWindow(btnPurpleRainThme, SW_HIDE);
+	ShowWindow(btnXLSize, SW_HIDE);
+	ShowWindow(btnOGSize, SW_HIDE);
+	ShowWindow(btnSDThme, SW_HIDE);
+	ShowWindow(btnHelpThme, SW_HIDE);
 	}
 
 }
